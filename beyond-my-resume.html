@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Avinash R: The PM Who Finds the Real Bottleneck</title>
+<meta name="description" content="Product Manager who finds the real bottleneck, not the obvious one. This site shows the decisions behind Glide and CareerOS, wrong turns included.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#050508; --surface:rgba(255,255,255,0.03); --surface-2:rgba(255,255,255,0.06);
+    --text:#F4F4F6; --text-dim:rgba(244,244,246,0.55); --border:rgba(255,255,255,0.1);
+    --blue:#1E6FFF; --green:#00D4B4; --violet:#8B7FFF; --amber:#F5A623; --danger:#FF4D6D; --pink:#FF6FA5;
+    --placeholder-bg: rgba(139,127,255,0.08);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background-color:var(--bg); background-image:radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px); background-size:26px 26px; color:var(--text); font-family:'Inter',system-ui,sans-serif; font-size:16px; line-height:1.65; overflow-x:hidden;}
+  h1,h2,h3{font-family:'Inter',system-ui,sans-serif; font-weight:900; letter-spacing:-0.03em;}
+  .mono{font-family:'JetBrains Mono',monospace;}
+  a{color:var(--blue); text-decoration:none;}
+  svg{display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+  .placeholder{background:var(--placeholder-bg); border:1px dashed var(--violet); border-radius:8px; padding:2px 8px; font-size:12.5px; color:var(--violet); font-family:'JetBrains Mono',monospace;}
+  .reveal{opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in-view{opacity:1; transform:translateY(0);}
+  section{padding:100px 0; scroll-margin-top:80px;}
+  @media (max-width:900px){ section{padding:64px 0;} .wrap{padding:0 20px;} }
+
+  .eyebrow{font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.12em; text-transform:uppercase; color:var(--green); display:flex; align-items:center; gap:8px; margin-bottom:14px;}
+  .eyebrow::after{content:''; width:26px; height:1px; background:var(--border);}
+  .btn{font-family:'Inter',sans-serif; font-size:14px; font-weight:700; padding:14px 26px; border-radius:100px; border:1.5px solid var(--border); background:transparent; color:var(--text); cursor:pointer; display:inline-flex; align-items:center; gap:8px; transition:all .25s;}
+  .btn-accent{background:var(--blue); border-color:var(--blue); color:#fff;}
+  .btn:hover{border-color:var(--text-dim); transform:translateY(-2px);}
+  .btn-accent:hover{background:var(--green); border-color:var(--green); color:#05070f;}
+  .btn:focus-visible, .lib-card:focus-visible, .test-choice:focus-visible, a:focus-visible{outline:2px solid var(--green); outline-offset:3px;}
+
+  /* ===== NAV ===== */
+  nav{position:sticky; top:0; z-index:80; backdrop-filter:blur(14px); background:rgba(5,5,8,0.75); border-bottom:1px solid var(--border);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px;}
+  .nav-brand{display:flex; align-items:center; gap:10px;}
+  .nav-mark{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg, var(--blue), var(--green)); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:15px; color:#05070f; flex-shrink:0;}
+  .nav-name{font-size:13.5px; font-weight:800; letter-spacing:0.04em;}
+  .nav-links{display:flex; gap:30px; align-items:center;}
+  .nav-links a{font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); transition:color .2s;}
+  .nav-links a:hover{color:var(--text);}
+  .nav-cta{display:none; align-items:center; gap:8px;}
+  @media (min-width:901px){ .nav-cta{display:inline-flex;} }
+  .nav-burger{display:none; width:38px; height:38px; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text); cursor:pointer;}
+  @media (max-width:900px){ .nav-links{display:none;} .nav-burger{display:flex; align-items:center; justify-content:center;} }
+  .mobile-menu{display:none; flex-direction:column; gap:2px; border-top:1px solid var(--border); padding:14px 20px 20px;}
+  .mobile-menu.open{display:flex;}
+  .mobile-menu a{font-family:'JetBrains Mono',monospace; font-size:13px; text-transform:uppercase; letter-spacing:0.05em; color:var(--text-dim); padding:12px 4px; border-bottom:1px solid var(--border);}
+
+  /* ===== HERO ===== */
+  .hero{padding-top:70px; padding-bottom:70px; overflow:hidden;}
+  .hero-grid{display:grid; grid-template-columns:1.15fr 0.95fr; gap:50px; align-items:center;}
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:40px;} }
+  .hero-badge{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border); border-radius:100px; padding:7px 16px; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:22px;}
+  .identity-line{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--green); margin-bottom:16px; letter-spacing:0.02em;}
+  .hero h1{font-size:clamp(32px,4.4vw,50px); line-height:1.16; margin-bottom:18px;}
+  .hero h1 .hl{background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  .hero .sub{font-size:15.5px; color:var(--text-dim); max-width:470px; margin-bottom:28px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:0;}
+
+  .hero-visual{position:relative; perspective:1000px;}
+  .hero-photo-wrap{position:relative; max-width:380px; margin:0 auto; transition:transform .2s ease-out;}
+  .hero-photo{width:100%; aspect-ratio:3/4; border-radius:24px; background:linear-gradient(160deg, var(--surface-2), var(--surface)); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; box-shadow:0 40px 90px rgba(0,0,0,0.5); overflow:hidden; position:relative;}
+  .hero-video{width:100%; height:100%; object-fit:cover; display:block;}
+  .hero-photo svg{width:90px; height:90px; color:var(--text-dim); opacity:0.5;}
+  .hero-photo span{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--violet); text-align:center; max-width:220px; padding:0 20px;}
+  .float-badge{position:absolute; display:flex; align-items:center; gap:8px; background:rgba(10,12,20,0.85); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:100px; padding:9px 16px; font-size:12px; font-weight:700; box-shadow:0 14px 30px rgba(0,0,0,0.4); animation:floatY 5s ease-in-out infinite;}
+  .float-badge svg{width:15px; height:15px; flex-shrink:0;}
+  .float-badge.b1{top:6%; left:-8%; color:var(--blue); animation-delay:0s;}
+  .float-badge.b2{top:38%; right:-14%; color:var(--green); animation-delay:1.2s;}
+  .float-badge.b3{bottom:10%; left:-4%; color:var(--violet); animation-delay:2.4s;}
+  @keyframes floatY{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
+  @media (max-width:900px){ .float-badge.b1{left:0;} .float-badge.b2{right:0;} .float-badge.b3{left:0;} }
+  @media (prefers-reduced-motion: reduce){ .float-badge{animation:none;} }
+  .scroll-indicator{display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:44px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; color:var(--text-dim); text-transform:uppercase;}
+  .scroll-pill{width:22px; height:36px; border:1.5px solid var(--border); border-radius:100px; position:relative;}
+  .scroll-pill::before{content:''; position:absolute; top:6px; left:50%; transform:translateX(-50%); width:3px; height:8px; border-radius:100px; background:var(--green); animation:scrollDot 1.8s ease-in-out infinite;}
+  @keyframes scrollDot{0%{opacity:1; top:6px;} 100%{opacity:0; top:20px;}}
+
+  /* ===== DECISION FRAMEWORK (chain) ===== */
+  .framework{border-top:1px solid var(--border);}
+  .framework-head{display:grid; grid-template-columns:1fr 1.3fr; gap:40px; align-items:start; margin-bottom:46px;}
+  @media (max-width:900px){ .framework-head{grid-template-columns:1fr;} }
+  .framework h2{font-size:clamp(26px,3.6vw,34px); line-height:1.2;}
+  .framework h2 .hl{color:var(--blue);}
+  .framework-desc{font-size:14.5px; color:var(--text-dim);}
+  .step-row{display:flex; align-items:flex-start; gap:0; overflow-x:auto; padding-bottom:10px;}
+  .step{display:flex; flex-direction:column; align-items:center; text-align:center; min-width:118px; flex-shrink:0;}
+  .step-circle{width:52px; height:52px; border-radius:50%; border:1.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; color:var(--blue); margin-bottom:12px; transition:transform .3s, border-color .3s, box-shadow .3s;}
+  .step:hover .step-circle{transform:translateY(-4px) scale(1.06); border-color:var(--blue); box-shadow:0 12px 26px rgba(30,111,255,0.25);}
+  .step-title{font-size:13px; font-weight:800; margin-bottom:5px;}
+  .step-desc{font-size:11.5px; color:var(--text-dim); max-width:120px;}
+  .step-connector{flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px); margin:26px 4px 0; min-width:18px;}
+  .step.kill .step-circle{border-color:var(--danger); color:var(--danger);}
+
+  /* ===== FEATURED WORK ===== */
+  .work-lead{font-size:14.5px; color:var(--text-dim); max-width:520px; margin-top:14px;}
+  .work-stack{margin-top:40px; display:flex; flex-direction:column; gap:24px;}
+  .work-card{border:1px solid var(--border); border-radius:20px; overflow:hidden; background:var(--surface); transition:border-color .35s;}
+  .work-card:hover{border-color:rgba(255,255,255,0.2);}
+  .work-hero{display:grid; grid-template-columns:1.1fr 1fr;}
+  @media (max-width:800px){ .work-hero{grid-template-columns:1fr;} }
+  .work-preview{aspect-ratio:16/11; background:radial-gradient(circle at 30% 20%, rgba(30,111,255,0.22), transparent 60%), radial-gradient(circle at 80% 80%, rgba(0,212,180,0.2), transparent 60%), var(--bg); display:flex; align-items:center; justify-content:center; position:relative; border-right:1px solid var(--border);}
+  @media (max-width:800px){ .work-preview{border-right:none; border-bottom:1px solid var(--border);} }
+  .work-preview .wordmark{font-size:clamp(30px,5vw,46px); font-weight:900; letter-spacing:-0.03em; background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  .work-card.secondary .work-preview{aspect-ratio:16/9;}
+  .work-card.secondary .work-preview .wordmark{font-size:clamp(24px,3.6vw,32px);}
+  .work-body{padding:30px 30px 28px; display:flex; flex-direction:column;}
+  .work-body h3{font-size:24px; margin-bottom:4px;}
+  .work-card.secondary .work-body h3{font-size:19px;}
+  .work-tag{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px; display:block;}
+  .work-body > p.hook{font-size:14.5px; color:var(--text-dim); margin-bottom:18px;}
+  .work-links{display:flex; gap:12px; flex-wrap:wrap; margin-top:auto;}
+  .decision-toggle{font-family:'Inter',sans-serif; font-size:13px; font-weight:700; border:1.5px solid var(--border); border-radius:100px; padding:10px 18px; background:transparent; color:var(--text); cursor:pointer;}
+  .decision-toggle:hover{border-color:var(--green);}
+  .decision-panel{max-height:0; overflow:hidden; transition:max-height .4s ease; margin-top:0;}
+  .decision-panel.open{max-height:600px; margin-top:18px;}
+  .decision-panel-inner{border-top:1px dashed var(--border); padding-top:16px; display:grid; gap:12px;}
+  .decision-row{font-size:13px; color:var(--text-dim); line-height:1.55;}
+  .decision-row strong{color:var(--text); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:3px;}
+  .decision-row.rejected strong{color:var(--danger);}
+  .decision-row.kept strong{color:var(--green);}
+
+  /* ===== PRODUCT THINKING LIBRARY ===== */
+  .lib-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:36px;}
+  @media (max-width:800px){ .lib-grid{grid-template-columns:repeat(2,1fr);} }
+  .lib-card{border:1px solid var(--border); border-radius:16px; padding:22px 20px; background:var(--surface); text-align:left; transition:transform .3s, border-color .3s; display:block; cursor:pointer; position:relative;}
+  .lib-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
+  .lib-icon{width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;}
+  .lib-card h3{font-size:14.5px; font-weight:800; margin-bottom:4px;}
+  .lib-card span.role{font-size:11.5px; color:var(--text-dim);}
+  .lib-hook{font-size:12.5px; color:var(--text); font-style:italic; line-height:1.5; margin-top:10px;}
+  .lib-insight{max-height:0; overflow:hidden; transition:max-height .35s ease; font-size:11.5px; color:var(--green); line-height:1.5; font-style:italic;}
+  .lib-card.open .lib-insight{max-height:120px; margin-top:10px;}
+  .lib-hint{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:8px; display:block;}
+  .lib-card.open .lib-hint{display:none;}
+
+  /* ===== WORKING STYLE ===== */
+  .style-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:40px;}
+  @media (max-width:800px){ .style-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:520px){ .style-grid{grid-template-columns:1fr;} }
+  .style-card{border:1px solid var(--border); border-radius:16px; padding:22px; background:var(--surface);}
+  .style-tag{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--green); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px; display:block;}
+  .style-card p{font-size:14px; color:var(--text); font-weight:600; line-height:1.5;}
+
+  /* ===== LESSONS FROM FAILURE ===== */
+  .lesson-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:40px;}
+  @media (max-width:900px){ .lesson-grid{grid-template-columns:1fr;} }
+  .lesson-card{border:1px solid var(--border); border-radius:18px; overflow:hidden; background:var(--surface);}
+  .lesson-top{padding:20px 22px 0;}
+  .lesson-num{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--danger); margin-bottom:12px; display:block;}
+  .lesson-card h3{font-size:17px; margin-bottom:10px;}
+  .lesson-card .story{font-size:13.5px; color:var(--text-dim); margin-bottom:18px;}
+  .lesson-bottom{background:var(--surface-2); padding:16px 22px; border-top:1px solid var(--border); font-size:12.5px;}
+  .lesson-bottom strong{color:var(--green); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; display:block; margin-bottom:4px;}
+  .lesson-bottom span{color:var(--text-dim);}
+  .lesson-today{padding:14px 22px 20px; font-size:12.5px; color:var(--text-dim); border-top:1px dashed var(--border); display:none;}
+  .lesson-today.show{display:block;}
+  .lesson-today strong{color:var(--blue); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; display:block; margin-bottom:4px;}
+  .lesson-more{width:100%; background:transparent; border:none; border-top:1px solid var(--border); color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; padding:12px; cursor:pointer;}
+  .lesson-more:hover{color:var(--text);}
+
+  /* ===== RESUME & STATS ===== */
+  .stats-block{border-top:1px solid var(--border);}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr) 1.4fr; gap:14px; align-items:stretch;}
+  @media (max-width:900px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
+  .stat-card{border:1px solid var(--border); border-radius:16px; padding:22px 18px; background:var(--surface); text-align:center;}
+  .stat-card .s-icon{color:var(--blue); margin:0 auto 10px;}
+  .stat-num{font-size:26px; font-weight:900; letter-spacing:-0.02em;}
+  .stat-lbl{font-size:11.5px; color:var(--text-dim); margin-top:4px;}
+  .stat-cta{border:1px solid var(--border); border-radius:16px; padding:22px; background:linear-gradient(135deg, rgba(30,111,255,0.1), rgba(0,212,180,0.08)); display:flex; flex-direction:column; justify-content:center; gap:14px;}
+  .stat-cta p{font-size:14.5px; font-weight:700;}
+
+  /* ===== THE WRONG TURN TEST — moved after trust is earned ===== */
+  .test-section{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(180deg, rgba(30,111,255,0.04), transparent);}
+  .test-eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--danger); border:1px solid var(--danger); border-radius:100px; padding:6px 16px; margin-bottom:20px;}
+  .test-intro{font-size:13.5px; color:var(--text-dim); max-width:560px; margin-bottom:22px;}
+  .test-question{font-size:clamp(20px,3vw,27px); font-weight:800; line-height:1.4; max-width:620px; margin-bottom:28px;}
+  .test-choices{display:flex; gap:12px; flex-wrap:wrap;}
+  .test-choice{border:1.5px solid var(--border); border-radius:100px; padding:13px 22px; background:var(--surface); color:var(--text); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:all .2s;}
+  .test-choice:hover{border-color:var(--blue);}
+  .test-choice.picked{border-color:var(--green); background:rgba(0,212,180,0.1);}
+  .test-ack{margin-top:20px; font-size:14px; color:var(--green); font-style:italic; display:none;}
+  .test-ack.show{display:block;}
+
+  .verdict-block{border-top:1px solid var(--border); background:#000;}
+  .verdict-block .wrap{text-align:center;}
+  .verdict-score{font-size:clamp(56px,10vw,100px); font-weight:900; letter-spacing:-0.04em; color:var(--danger); line-height:0.9; margin-bottom:6px;}
+  .verdict-score small{font-size:0.32em; color:var(--text-dim); font-weight:700;}
+  .verdict-sub{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:32px;}
+  .verdict-line{font-size:clamp(19px,3vw,25px); font-weight:800; color:#fff; max-width:620px; margin:0 auto 14px;}
+  .verdict-line.dim{color:var(--text-dim); font-weight:700;}
+  .verdict-note{font-size:14.5px; color:var(--text-dim); max-width:540px; margin:22px auto 0;}
+
+  /* ===== DECISION LOG — the signature moment ===== */
+  .dlog-tab{position:fixed; bottom:22px; right:22px; z-index:90; display:flex; align-items:center; gap:9px; background:rgba(8,9,14,0.9); backdrop-filter:blur(10px); border:1.5px solid var(--border); border-radius:100px; padding:11px 18px 11px 14px; cursor:pointer; box-shadow:0 16px 40px rgba(0,0,0,0.5); transition:border-color .25s, transform .25s;}
+  .dlog-tab:hover{border-color:var(--green); transform:translateY(-2px);}
+  .dlog-dot{width:8px; height:8px; border-radius:50%; background:var(--text-dim); flex-shrink:0; transition:background .3s;}
+  .dlog-tab.has-entries .dlog-dot{background:var(--green); box-shadow:0 0 0 0 rgba(0,212,180,0.6); animation:dlogPulse 1.6s ease-out 1;}
+  @keyframes dlogPulse{0%{box-shadow:0 0 0 0 rgba(0,212,180,0.55);} 100%{box-shadow:0 0 0 10px rgba(0,212,180,0);}}
+  .dlog-label{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em;}
+  .dlog-count{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text); font-weight:700;}
+  @media (max-width:640px){ .dlog-tab{bottom:14px; right:14px; padding:10px 14px 10px 12px;} .dlog-label{display:none;} }
+
+  .dlog-panel{position:fixed; bottom:78px; right:22px; z-index:89; width:300px; max-height:0; overflow:hidden; background:rgba(8,9,14,0.97); backdrop-filter:blur(14px); border:1px solid var(--border); border-radius:16px; box-shadow:0 24px 60px rgba(0,0,0,0.55); transition:max-height .35s ease, opacity .3s ease; opacity:0;}
+  .dlog-panel.open{max-height:360px; opacity:1;}
+  @media (max-width:640px){ .dlog-panel{right:14px; left:14px; width:auto;} }
+  .dlog-panel-head{padding:14px 16px 10px; border-bottom:1px solid var(--border); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; color:var(--text-dim);}
+  .dlog-panel-body{padding:10px 16px 16px; max-height:280px; overflow-y:auto; display:flex; flex-direction:column; gap:10px;}
+  .dlog-empty{font-size:12.5px; color:var(--text-dim); line-height:1.5; padding:6px 0;}
+  .dlog-entry{font-size:12px; line-height:1.5;}
+  .dlog-entry .dlog-action{color:var(--text); font-weight:700; display:block;}
+  .dlog-entry .dlog-insight{color:var(--green); font-style:italic;}
+
+  .verdict-log{border-top:1px dashed var(--border); margin-top:38px; padding-top:32px; text-align:left; max-width:620px; margin-left:auto; margin-right:auto;}
+  .verdict-log-title{font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--green); margin-bottom:14px;}
+  .verdict-log-chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .verdict-log-chip{font-family:'JetBrains Mono',monospace; font-size:11px; border:1px solid var(--border); border-radius:100px; padding:6px 13px; color:var(--text-dim);}
+  .verdict-log-text{font-size:14.5px; color:var(--text); line-height:1.6;}
+
+  /* ===== HIRING NOTES — the closing signature moment ===== */
+  .notes-block{border-top:1px solid var(--border); background:linear-gradient(180deg, transparent, rgba(0,212,180,0.04));}
+  .notes-doc{border:1px solid var(--border); border-radius:20px; background:var(--surface); margin-top:36px; overflow:hidden;}
+  .notes-doc-head{padding:22px 28px; border-bottom:1px dashed var(--border); display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;}
+  .notes-doc-head h3{font-size:15px; font-family:'JetBrains Mono',monospace; letter-spacing:0.02em; font-weight:700;}
+  .notes-doc-meta{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em;}
+  .notes-doc-body{padding:28px;}
+  .notes-line{font-size:14.5px; color:var(--text-dim); margin-bottom:16px; line-height:1.6;}
+  .notes-checklist{display:flex; flex-direction:column; gap:11px; margin-bottom:26px;}
+  .notes-check-item{display:flex; align-items:center; gap:13px; font-size:14.5px; color:var(--text-dim); transition:color .3s;}
+  .notes-check-item.yes{color:var(--text);}
+  .notes-check-mark{font-family:'JetBrains Mono',monospace; font-weight:800; width:18px; flex-shrink:0; font-size:15px;}
+  .notes-check-item.yes .notes-check-mark{color:var(--green);}
+  .notes-check-item.no .notes-check-mark{color:var(--text-dim); opacity:0.5;}
+  .notes-verdict{border-top:1px dashed var(--border); padding-top:20px; margin-bottom:6px;}
+  .notes-verdict .verdict-tag{display:block; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; font-weight:700;}
+  .notes-verdict .verdict-line{font-size:18px; font-weight:800; color:#fff; line-height:1.5;}
+  .notes-close{border-top:1px solid var(--border); padding-top:18px; font-size:15px; font-weight:700; color:#fff;}
+  @media (max-width:700px){ .notes-doc-body{padding:22px;} .notes-doc-head{padding:18px 22px;} }
+
+  .dlog-nudge{position:fixed; bottom:78px; right:22px; z-index:88; max-width:230px; background:rgba(8,9,14,0.97); border:1px solid var(--green); border-radius:12px; padding:12px 14px; font-size:12px; line-height:1.5; color:var(--text); box-shadow:0 20px 44px rgba(0,0,0,0.5); opacity:0; transform:translateY(8px); pointer-events:none; transition:opacity .35s, transform .35s;}
+  .dlog-nudge.show{opacity:1; transform:translateY(0);}
+  @media (max-width:640px){ .dlog-nudge{right:14px; max-width:200px;} }
+
+  /* ===== CONNECT — LinkedIn / Resume / Say Hello cards ===== */
+  .connect-block{border-top:1px solid var(--border); padding:70px 0 60px;}
+  .connect-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
+  @media (max-width:700px){ .connect-grid{grid-template-columns:1fr;} }
+  .connect-card{border:1px solid var(--border); border-radius:22px; background:var(--surface); padding:44px 24px 38px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0; transition:transform .3s, border-color .3s;}
+  .connect-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
+  .connect-icon{width:64px; height:64px; display:flex; align-items:center; justify-content:center; margin-bottom:22px;}
+  .connect-icon svg{width:100%; height:100%; display:block;}
+  .connect-card h3{font-size:17px; font-weight:800; color:#fff; margin-bottom:7px;}
+  .connect-card span{font-size:13.5px; color:var(--text-dim); font-family:'Inter',sans-serif; font-weight:400;}
+
+  footer{padding:30px 0; border-top:1px solid var(--border);}
+  footer p{font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-brand">
+      <div class="nav-mark">AR</div>
+      <span class="nav-name">AVINASH R</span>
+    </div>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#thinking">Decisions</a>
+      <a href="#process">Behaviors</a>
+      <a href="#failures">Failures</a>
+      <a href="#resume">Resume</a>
+      <a href="#notes">Notes</a>
+    </div>
+    <div class="nav-cta">
+      <a class="btn btn-accent" style="padding:10px 20px; font-size:13px;" href="#contact">Let's Connect →</a>
+    </div>
+    <button class="nav-burger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#work">Work</a>
+    <a href="#thinking">Decisions</a>
+    <a href="#process">Behaviors</a>
+    <a href="#failures">Failures</a>
+    <a href="#resume">Resume</a>
+    <a href="#notes">Notes</a>
+    <a href="#contact">Let's Connect →</a>
+  </div>
+</nav>
+
+<!-- ============ HERO — who / what / why keep scrolling ============ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-badge reveal in-view">✦ Beyond My Resume</span>
+        <h1 class="reveal in-view">You already have a theory about what's wrong here.<br><span class="hl">It's probably not the real one.</span></h1>
+        <p class="sub reveal in-view">I'm Avinash, a Product Manager who finds the real bottleneck, not the obvious one. One product below took three complete rewrites before I found it. That's Glide. This site is the evidence, not the highlight reel.</p>
+        <div class="hero-actions reveal in-view">
+          <a class="btn btn-accent" href="#work">See what survived →</a>
+          <a class="btn" href="#failures">See what got killed</a>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal in-view">
+        <div class="hero-photo-wrap" id="heroPhotoWrap">
+          <div class="hero-photo">
+            <video class="hero-video" autoplay muted loop playsinline preload="metadata">
+              <source src="avinash-portrait.mp4" type="video/mp4">
+            </video>
+          </div>
+          <span class="float-badge b1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v4L5 15a3 3 0 003 4h8a3 3 0 003-4L15 7V3"/></svg>3 versions of Glide killed</span>
+          <span class="float-badge b2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>1 feature killed pre-launch</span>
+          <span class="float-badge b3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>0 bug reports on the real problem</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator reveal in-view"><span class="scroll-pill"></span>Scroll</div>
+  </div>
+</section>
+
+<!-- ============ HOW DECISIONS GET MADE — custom vocabulary chain ============ -->
+<section class="framework" id="thinking">
+  <div class="wrap">
+    <div class="framework-head">
+      <div>
+        <span class="eyebrow">My Vocabulary</span>
+        <h2 class="reveal">How decisions <span class="hl">get made.</span></h2>
+      </div>
+      <p class="framework-desc reveal">Not research → ideation → validation. That language hides the actual work, which is mostly saying no. This is the chain every decision below actually went through.</p>
+    </div>
+
+    <div class="step-row reveal">
+      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><span class="step-title">Observe</span><span class="step-desc">Watch what people actually do, not what they say.</span></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div><span class="step-title">Reduce Uncertainty</span><span class="step-desc">Find the one question that actually matters.</span></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg></div><span class="step-title">Generate Options</span><span class="step-desc">Real alternatives, not one idea in three costumes.</span></div>
+      <div class="step-connector"></div>
+      <div class="step kill"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div><span class="step-title">Kill Weak Ideas</span><span class="step-desc">Most options die here. That's the point.</span></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div><span class="step-title">Commit</span><span class="step-desc">Pick the trade-off. Own it in writing.</span></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div><span class="step-title">Measure</span><span class="step-desc">One metric decided before we built.</span></div>
+      <div class="step-connector"></div>
+      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l4-8 4 5 4-10 4 13"/></svg></div><span class="step-title">Learn</span><span class="step-desc">Feed it back in. See "Failures" below.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FEATURED WORK — Glide is the hero ============ -->
+<section id="work" data-zone="work">
+  <div class="wrap">
+    <span class="eyebrow">The Evidence</span>
+    <h2 class="reveal">Two problems <span style="color:var(--blue);">I couldn't stop thinking about.</span></h2>
+    <p class="work-lead reveal">Click "See the decision" on either one. The alternatives I rejected are the actual point, not the finished product.</p>
+
+    <div class="work-stack reveal">
+      <!-- GLIDE — the hero -->
+      <div class="work-card">
+        <div class="work-hero">
+          <a class="work-preview" href="https://avinash0431.github.io/Glide/" target="_blank" rel="noopener" onclick="trackEvent('work_glide')">
+            <span class="wordmark">Glide</span>
+          </a>
+          <div class="work-body">
+            <h3>Glide</h3>
+            <span class="work-tag">Travel super app, version 3 of 3</span>
+            <p class="hook">0 of 11 travel platforms I audited would tell you if you'd actually get a visa. Glide is the one that tries. Built solo, and the first two versions were wrong.</p>
+            <div class="work-links">
+              <a class="btn btn-accent" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/Glide/" target="_blank" rel="noopener">Open Glide →</a>
+              <button class="decision-toggle" onclick="toggleDecision('glide', this)">See the decision</button>
+            </div>
+            <div class="decision-panel" id="panel-glide">
+              <div class="decision-panel-inner">
+                <div class="decision-row"><strong>The hard call</strong>Build a document checklist, or actually try to predict approval likelihood.</div>
+                <div class="decision-row rejected"><strong>Rejected (v1 & v2)</strong>A compliance checklist. Fast to build, felt like progress, and users kept asking anyway: "but will I actually get approved?"</div>
+                <div class="decision-row kept"><strong>Trade-off accepted (v3)</strong>Slower to build and riskier to be wrong about, but it finally answered the question people were actually asking.</div>
+                <div class="decision-row"><strong>Outcome</strong>Shipped. The version that stuck is the one that stopped being polite about the real fear.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAREEROS — proof it generalizes -->
+      <div class="work-card secondary">
+        <div class="work-hero">
+          <a class="work-preview" href="https://avinash0431.github.io/careeros/" target="_blank" rel="noopener" onclick="trackEvent('work_careeros')">
+            <span class="wordmark">CareerOS</span>
+          </a>
+          <div class="work-body">
+            <h3>CareerOS</h3>
+            <span class="work-tag">Proof the thinking travels, not another case study</span>
+            <p class="hook">Glide proves this works in travel. CareerOS proves it isn't a fluke. Same chain, a completely different domain: my own job search, automated.</p>
+            <div class="work-links">
+              <a class="btn btn-accent" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/careeros/" target="_blank" rel="noopener">Open CareerOS →</a>
+              <button class="decision-toggle" onclick="toggleDecision('career', this)">See the decision</button>
+            </div>
+            <div class="decision-panel" id="panel-career">
+              <div class="decision-panel-inner">
+                <div class="decision-row"><strong>The hard call</strong>Whether to let CareerOS auto-apply on my behalf to maximize volume.</div>
+                <div class="decision-row rejected"><strong>Rejected</strong>Full automation, applying to every match without review. No user testing caught this. I did, before it shipped.</div>
+                <div class="decision-row kept"><strong>Trade-off accepted</strong>One extra manual step, every time, because automation should remove work, not remove my decision.</div>
+                <div class="decision-row"><strong>Outcome</strong>CareerOS automates coordination: sourcing, tailoring, follow-up cadence. It never automates the "yes."</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PRODUCT THINKING LIBRARY ============ -->
+<section data-zone="library">
+  <div class="wrap">
+    <span class="eyebrow">Product Thinking Library</span>
+    <h2 class="reveal">Seven more <span style="color:var(--green);">product decisions.</span></h2>
+    <p class="work-lead reveal">Tap a card for the one-line decision behind it. Not a project gallery, but a library of choices you can check for yourself.</p>
+
+    <div class="lib-grid reveal">
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'prism')" onkeydown="if(event.key==='Enter')toggleLib(this, 'prism')">
+        <div class="lib-icon" style="background:rgba(30,111,255,0.14); color:var(--blue);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <h3>Prism</h3><span class="role">Discovery · Focus app</span>
+        <p class="lib-hook">What almost turned focus into anxiety?</p>
+        <p class="lib-insight">Killed the streaks/gamification layer in week two. It was manufacturing anxiety, not focus.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Prism-Reimagining-Practical-STEM-Learning-Through-Immersive-Classrooms-3931d93326e981e783e5c7ed1ed617d8?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_prism')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'connections')" onkeydown="if(event.key==='Enter')toggleLib(this, 'connections')">
+        <div class="lib-icon" style="background:rgba(255,111,165,0.14); color:var(--pink);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M10 10l4 4"/></svg></div>
+        <h3>Beyond Connections</h3><span class="role">Professional networking</span>
+        <p class="lib-hook">Why more connections made this worse, not better.</p>
+        <p class="lib-insight">Rejected the "add more connections" model entirely. It optimized for adding people, not for anyone replying.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Beyond-Connections-3931d93326e981a79e91f4a13ae52cf7?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_connections')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'signal')" onkeydown="if(event.key==='Enter')toggleLib(this, 'signal')">
+        <div class="lib-icon" style="background:rgba(0,212,180,0.14); color:var(--green);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div>
+        <h3>Signal</h3><span class="role">Analytics & insights</span>
+        <p class="lib-hook">The dashboard everyone opened exactly once. Why?</p>
+        <p class="lib-insight">The dashboard nobody opened twice. The fix wasn't more charts. It was cutting to one number.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Signals-Over-Noise-3931d93326e9810c90dae86db002cc51?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_signals')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'pulse')" onkeydown="if(event.key==='Enter')toggleLib(this, 'pulse')">
+        <div class="lib-icon" style="background:rgba(255,77,109,0.14); color:var(--danger);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div>
+        <h3>Pulse</h3><span class="role">Monitoring & intelligence</span>
+        <p class="lib-hook">Why revenue had to wait its turn.</p>
+        <p class="lib-insight">Monetization was moved to come after trust, not before. That's the reverse of the original plan.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Trust-Before-Revenue-3931d93326e981af9a92eff02c5c626a?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_trust')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'catalyst')" onkeydown="if(event.key==='Enter')toggleLib(this, 'catalyst')">
+        <div class="lib-icon" style="background:rgba(245,166,35,0.14); color:var(--amber);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1 3-6z"/></svg></div>
+        <h3>Catalyst</h3><span class="role">Growth & activation</span>
+        <p class="lib-hook">The first play wasn't the one that mattered. Which was?</p>
+        <p class="lib-insight">The first play wasn't the moment that mattered for retention. The second one was, so we redesigned around that.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Beyond-the-First-Play-3931d93326e981428bc3e69cf84b971d?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_firstplay')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'compass')" onkeydown="if(event.key==='Enter')toggleLib(this, 'compass')">
+        <div class="lib-icon" style="background:rgba(139,127,255,0.14); color:var(--violet);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
+        <h3>Compass</h3><span class="role">Strategy & planning</span>
+        <p class="lib-hook">Three good ideas. Only one got the green light. Why?</p>
+        <p class="lib-insight">Said no to scaling three decent ideas at once, so one idea got enough attention to actually work.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Scaling-with-Intent-3931d93326e981bc82aeff3454195670?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_scaling')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'canvas')" onkeydown="if(event.key==='Enter')toggleLib(this, 'canvas')">
+        <div class="lib-icon" style="background:rgba(30,111,255,0.14); color:var(--blue);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <h3>Canvas</h3><span class="role">AI-powered workspace</span>
+        <p class="lib-hook">The model wasn't the product. So what was?</p>
+        <p class="lib-insight">The model was never the product. The workflow wrapped around it was, so that's what we designed first.</p>
+        <span class="lib-hint mono">tap for the decision →</span>
+        <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Beyond-the-Model-3931d93326e9813ba555c9d02813b17e?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_model')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKING STYLE — behaviors, not adjectives ============ -->
+<section id="process" data-zone="process">
+  <div class="wrap">
+    <span class="eyebrow">Not Adjectives</span>
+    <h2 class="reveal">What working with me <span style="color:var(--blue);">actually looks like.</span></h2>
+    <p class="work-lead reveal">"Collaborative" and "data-driven" mean nothing until they're a behavior. Here's what they turn into on my team.</p>
+
+    <div class="style-grid reveal">
+      <div class="style-card"><span class="style-tag">Instead of "collaborative"</span><p>I involve engineering before requirements become expensive to change.</p></div>
+      <div class="style-card"><span class="style-tag">Instead of "data-driven"</span><p>I don't ship a feature until I know which single metric will prove it worked.</p></div>
+      <div class="style-card"><span class="style-tag">Instead of "user-centric"</span><p>I ask what happens if we're wrong before I ask what happens if we're right.</p></div>
+      <div class="style-card"><span class="style-tag">Instead of "decisive"</span><p>I'll say "I don't know yet" out loud rather than fake a yes or no for comfort.</p></div>
+      <div class="style-card"><span class="style-tag">Instead of "scrappy"</span><p>I ship the smallest version that can actually be proven wrong, not the safest one.</p></div>
+      <div class="style-card"><span class="style-tag">Instead of "strategic"</span><p>I say no to three good ideas so one gets enough attention to actually work.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LESSONS FROM FAILURE ============ -->
+<section id="failures" data-zone="failures">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--danger);">The Uncomfortable Part</span>
+    <h2 class="reveal">Three decisions <span style="color:var(--danger);">I'd never make again.</span></h2>
+    <p class="work-lead reveal">Most PMs edit these out. They're the fastest way to see how someone actually thinks, so they stay in.</p>
+
+    <div class="lesson-grid reveal">
+      <div class="lesson-card">
+        <div class="lesson-top">
+          <span class="lesson-num">01. Glide</span>
+          <h3>Compliance ≠ Trust</h3>
+          <p class="story">I built a document checklist to resolve visa anxiety. Users kept asking "but will I actually get approved?" A checklist never answered that.</p>
+        </div>
+        <div class="lesson-bottom"><strong>Lesson</strong><span>A checklist satisfies the rule. It doesn't touch the fear behind it.</span></div>
+        <div class="lesson-today" id="today-glide"><strong>Today I'd do</strong><span>Prototype the prediction, however rough, before the checklist. Even a bad guess answers the real question better than a perfect form.</span></div>
+        <button class="lesson-more" onclick="toggleToday('glide', this)">What I'd do differently today →</button>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-top">
+          <span class="lesson-num">02. CareerOS</span>
+          <h3>Volume Isn't a Strategy</h3>
+          <p class="story">I optimized for more applications. 12 applications, 0 replies, in 4 days closed that question fast.</p>
+        </div>
+        <div class="lesson-bottom"><strong>Lesson</strong><span>Signal-to-noise beats raw effort, every time.</span></div>
+        <div class="lesson-today" id="today-volume"><strong>Today I'd do</strong><span>Set the "reply rate," not "applications sent," as the one metric before writing a line of code.</span></div>
+        <button class="lesson-more" onclick="toggleToday('volume', this)">What I'd do differently today →</button>
+      </div>
+      <div class="lesson-card">
+        <div class="lesson-top">
+          <span class="lesson-num">03. CareerOS</span>
+          <h3>Automating Away Agency</h3>
+          <p class="story">I designed auto-apply on a candidate's behalf. No user testing caught this one. I did, and killed it before it shipped.</p>
+        </div>
+        <div class="lesson-bottom"><strong>Lesson</strong><span>Automation should remove work, not remove the user's decision.</span></div>
+        <div class="lesson-today" id="today-agency"><strong>Today I'd do</strong><span>Write the one-line "who decides?" test into the spec on day one, not catch it in review.</span></div>
+        <button class="lesson-more" onclick="toggleToday('agency', this)">What I'd do differently today →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ THE WRONG TURN TEST — now that trust is earned ============ -->
+<section class="test-section" data-zone="thetest">
+  <div class="wrap">
+    <span class="test-eyebrow">The Wrong Turn Test</span>
+    <p class="test-intro reveal">You've seen Glide, CareerOS, and where I was wrong. One more. Try the actual call before you see how it played out.</p>
+    <p class="test-question reveal">Revenue dropped 18% last quarter. Engineering blames scale. Sales blames pricing. Support blames bugs. You can only investigate one first.</p>
+    <div class="test-choices reveal" id="testChoices">
+      <button class="test-choice" onclick="pickTest(this,'scale')">Scale, talk to engineering</button>
+      <button class="test-choice" onclick="pickTest(this,'pricing')">Pricing, talk to sales</button>
+      <button class="test-choice" onclick="pickTest(this,'bugs')">Bugs, talk to support</button>
+    </div>
+    <p class="test-ack" id="testAck">Noted. Scroll down for the result.</p>
+  </div>
+</section>
+
+<!-- ============ THE VERDICT ============ -->
+<section class="verdict-block" data-zone="verdict">
+  <div class="wrap">
+    <span class="test-eyebrow">The Wrong Turn Test: Result</span>
+    <p class="verdict-score reveal" id="verdictScore">0<small> / 2</small></p>
+    <p class="verdict-sub reveal">your lens matched the real cause, in the two decisions above</p>
+    <p class="verdict-line dim reveal" id="verdictPick"></p>
+    <p class="verdict-line reveal">Both times, the obvious cause wasn't the real one. That's what "See the decision" on Glide and CareerOS actually showed.</p>
+    <p class="verdict-note reveal">That instinct isn't wrong to have. It's just usually not where the real answer is waiting. That gap, between the obvious cause and the real one, is most of the job. If that's the judgment you want on your team, keep scrolling.</p>
+
+    <div class="verdict-log reveal" id="verdictLog">
+      <p class="verdict-log-title mono">Your Decision Log</p>
+      <div class="verdict-log-chips" id="verdictLogChips"></div>
+      <p class="verdict-log-text" id="verdictLogText">You haven't opened anything yet, so there's nothing to read into. Scroll back up and click a decision panel. The read updates live in the tab, bottom right.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESUME & STATS ============ -->
+<section class="stats-block" id="resume">
+  <div class="wrap">
+    <span class="eyebrow">Resume & More</span>
+    <h2 class="reveal">Everything else, right here.</h2>
+    <p class="work-lead" style="margin-bottom:34px;">Work experience, education, skills, and the plain-text version for your ATS.</p>
+
+    <div class="stats-grid reveal">
+      <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        <div class="stat-num">6+</div>
+        <div class="stat-lbl">Years of Experience</div>
+      </div>
+      <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg>
+        <div class="stat-num">15+</div>
+        <div class="stat-lbl">Products Shipped</div>
+      </div>
+      <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+        <div class="stat-num">10M+</div>
+        <div class="stat-lbl">Users Impacted</div>
+      </div>
+      <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        <div class="stat-num">High</div>
+        <div class="stat-lbl">Ownership & Impact</div>
+      </div>
+      <div class="stat-cta">
+        <p>You've seen how I decide, where I was wrong, and what I'd change. If that's the judgment you want on your team, let's talk.</p>
+        <a class="btn btn-accent" href="mailto:avinashvijay027@gmail.com" onclick="trackEvent('stats_contact')">Let's Connect →</a>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <button class="btn" onclick="downloadPlainResume(); trackEvent('resume_download')">Download plain-text resume</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HIRING NOTES — generated from the actual session ============ -->
+<section class="notes-block" id="notes">
+  <div class="wrap">
+    <span class="eyebrow" style="color:var(--green);">Generated From This Session</span>
+    <h2 class="reveal">Your Hiring Notes.</h2>
+    <p class="work-lead reveal">Not a personality quiz. Just a plain readout of what you actually opened, skipped, and lingered on. It's the same kind of note I'd write about a real decision.</p>
+
+    <div class="notes-doc reveal">
+      <div class="notes-doc-head">
+        <h3 class="mono">// session-notes.log</h3>
+        <span class="notes-doc-meta" id="notesTime">Time on page: ...</span>
+      </div>
+      <div class="notes-doc-body">
+        <p class="notes-line" id="notesIntro">Generating as you scroll. This fills in once, right here, based on this visit only. Nothing is saved.</p>
+        <div class="notes-checklist" id="notesChecklist"></div>
+        <p class="notes-verdict" id="notesVerdict"></p>
+        <p class="notes-close" id="notesClose"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONNECT — replaces the old icon row ============ -->
+<section class="connect-block" data-zone="connect">
+  <div class="wrap">
+    <div class="connect-grid reveal">
+      <a class="connect-card" href="https://linkedin.com/in/avinashr027/" target="_blank" rel="noopener" onclick="trackEvent('connect_linkedin')">
+        <div class="connect-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M7.15 9.1h2.55v7.9H7.15v-7.9zM8.42 4.8a1.48 1.48 0 110 2.96 1.48 1.48 0 010-2.96zM11.3 9.1h2.45v1.08h.03c.34-.64 1.18-1.32 2.43-1.32 2.6 0 3.08 1.71 3.08 3.93v4.21h-2.55v-3.73c0-.89-.02-2.04-1.24-2.04-1.24 0-1.43.97-1.43 1.97v3.8H11.3V9.1z"/></svg></div>
+        <h3>LinkedIn</h3>
+        <span>Connect</span>
+      </a>
+      <a class="connect-card" href="avinash-resume.pdf" target="_blank" rel="noopener" onclick="trackEvent('connect_resume')">
+        <div class="connect-icon"><svg viewBox="0 0 24 24"><path fill="#F5A623" d="M3 6.5A2 2 0 015 4.5h4.2l1.8 2h8A2 2 0 0121 8.5v9.2a2 2 0 01-2 2H5a2 2 0 01-2-2v-11z"/></svg></div>
+        <h3>Resume</h3>
+        <span>View or download</span>
+      </a>
+      <a class="connect-card" href="mailto:avinashvijay027@gmail.com" onclick="trackEvent('connect_email')">
+        <div class="connect-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#fff"/><path fill="#4285F4" d="M4.5 6.5v11a1 1 0 001 1h1.2V8.9L4.5 6.5z"/><path fill="#34A853" d="M19.5 6.5v11a1 1 0 01-1 1h-1.2V8.9l2.2-2.4z"/><path fill="#FBBC05" d="M4.5 6.5l1.4-1.2h12.2l1.4 1.2-9.5 6.6-9.5-6.6z"/><path fill="#EA4335" d="M6.7 8.9v9.6h10.6V8.9L12 12.9 6.7 8.9z"/></svg></div>
+        <h3>Say Hello</h3>
+        <span>Email me</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap" style="text-align:center; width:100%;">
+    <p>Avinash R · The PM who finds the real bottleneck, not the obvious one · Bangalore</p>
+  </div>
+</footer>
+
+<div class="dlog-tab" id="dlogTab" onclick="toggleDlogPanel()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')toggleDlogPanel()" aria-label="Your decision log">
+  <span class="dlog-dot" id="dlogDot"></span>
+  <span class="dlog-label mono">Decision Log</span>
+  <span class="dlog-count mono" id="dlogCount">0</span>
+</div>
+<div class="dlog-panel" id="dlogPanel">
+  <div class="dlog-panel-head">Logged live as you click. No data leaves this page</div>
+  <div class="dlog-panel-body" id="dlogBody">
+    <p class="dlog-empty">Nothing yet. Open a decision panel, tap a library card, or try the Wrong Turn Test. This fills in as you go.</p>
+  </div>
+</div>
+<div class="dlog-nudge" id="dlogNudge">I'm quietly logging what you click. Check the tab. It turns into your Hiring Notes at the end.</div>
+
+<script>
+  function trackEvent(name){ console.log('[track]', name); }
+
+  function downloadPlainResume(){
+    const text = [
+'AVINASH R',
+'Bangalore, avinashvijay027@gmail.com, 8608545732',
+'linkedin.com/in/avinashr027',
+'',
+'SUMMARY',
+'Product Manager who diagnoses the bottleneck before choosing the fix. 6+ years building AI-powered features',
+'across B2B SaaS, enterprise software, and IoT products. Chose pricing experiments over added acquisition spend,',
+'PRDs over rushed builds, and workflow redesign over new headcount. Together, these decisions drove acquisition up 30%,',
+'activation up 25%, feature engagement up 35%, and paid conversion to 4.3%.',
+'',
+'EXPERIENCE',
+'',
+'Product Manager, Sportstech, Bangalore (Sep 2025 to Present)',
+'Consumer IoT subscription platform with 174K+ freemium users and 12.4K+ paid subscribers.',
+'- Prioritized AI-enabled coaching over generic promotions, growing new user acquisition by 30%.',
+'- Redesigned the device-pairing flow instead of adding tutorial content, lifting Day-1 activation by 25%.',
+'- Built the recommendation strategy for an AI coaching engine, increasing session completion by 22% and DAU by 22.4%.',
+'- Prioritized pricing experiments over further acquisition spend, lifting conversion to 4.3% and retention to 96.8%.',
+'',
+'Product Manager, GetAI (ITC Infotech), Bangalore (Apr 2024 to Sep 2025)',
+'Enterprise operations platform for manufacturing and contract management.',
+'- Shipped three AI-driven capabilities including an LLM-based clause review assistant, growing feature engagement by 35%.',
+'- Wrote detailed PRDs and release plans before development began, achieving 95% on-time release completion.',
+'- Launched analytics dashboards over ad hoc reports, cutting reporting turnaround time by 40%.',
+'',
+'Product Manager, VS Happy Infotech, Bangalore (2022 to Mar 2024)',
+'US financial services platform. Joined Feb 2020 as Team Manager; promoted to Product Manager in 2022.',
+'- Redesigned the loan onboarding funnel, lifting NPS by 20 points and cutting churn by 20%.',
+'- Chose workflow redesign over adding support staff, cutting time-to-value from 14 to 6 days.',
+'- Standardized PRDs over informal specs, improving delivery alignment across 10+ initiatives.',
+'',
+'PRODUCT EXPERIENCE',
+'Glide, Travel Super App (0 to 1 product build), independent build, sole product owner.',
+'- Mapped the travel booking journey through user interviews across visa, flight, hotel, and transport steps.',
+'- Designed a unified cart and checkout over separate flows per vertical, cutting booking steps by 40%.',
+'',
+'SKILLS',
+'Product Strategy, Discovery, Roadmapping, PRDs, MVP Definition, Pricing Strategy, Go-to-Market, PLG',
+'Generative AI, LLM Applications, AI Workflow Automation, Prompt Engineering, Recommendation Systems',
+'SQL, A/B Testing, Funnel & Retention Analysis, KPI Tracking',
+'User Interviews, Journey Mapping, Usability Testing, Figma',
+'',
+'EDUCATION',
+'BBA, Bharathidasan University, Mechanical Engineering, GPTC, Trichy',
+'Certifications: Product Management (Great Learning), Digital Product Management (UVA), Google Project Management (Coursera)'
+].join('\n');
+    const blob = new Blob([text], {type:'text/plain'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = 'avinash-resume.txt';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pageLoadTime = Date.now();
+
+  /* ===== DECISION LOG — logs what the visitor engages with, then reads it back to them ===== */
+  const decisionLog = [];
+  const loggedKeys = new Set();
+  let statsViewed = false;
+  let notesGenerated = false;
+
+  function logDecision(key, action, insight, category){
+    if(loggedKeys.has(key)) return;
+    loggedKeys.add(key);
+    decisionLog.push({key, action, insight, category, time: Date.now()});
+    renderDlogPanel();
+    const tab = document.getElementById('dlogTab');
+    const count = document.getElementById('dlogCount');
+    count.textContent = decisionLog.length;
+    tab.classList.remove('has-entries');
+    void tab.offsetWidth; // restart pulse
+    tab.classList.add('has-entries');
+    renderVerdictLog();
+  }
+
+  function renderDlogPanel(){
+    const body = document.getElementById('dlogBody');
+    if(decisionLog.length === 0){
+      body.innerHTML = '<p class="dlog-empty">Nothing yet. Open a decision panel, tap a library card, or try the Wrong Turn Test. This fills in as you go.</p>';
+      return;
+    }
+    body.innerHTML = decisionLog.map(e =>
+      `<div class="dlog-entry"><span class="dlog-action">${e.action}</span><span class="dlog-insight">→ ${e.insight}</span></div>`
+    ).join('');
+  }
+
+  function toggleDlogPanel(){
+    document.getElementById('dlogPanel').classList.toggle('open');
+  }
+
+  function renderVerdictLog(){
+    const chipsEl = document.getElementById('verdictLogChips');
+    const textEl = document.getElementById('verdictLogText');
+    if(!chipsEl || !textEl) return;
+
+    if(decisionLog.length === 0){
+      chipsEl.innerHTML = '';
+      textEl.textContent = "You haven't opened anything yet, so there's nothing to read into. Scroll back up and click a decision panel. The read updates live in the tab, bottom right.";
+      return;
+    }
+
+    chipsEl.innerHTML = decisionLog.map(e => `<span class="verdict-log-chip">${e.action}</span>`).join('');
+
+    if(decisionLog.length === 1){
+      textEl.textContent = `One click isn't a personality test, but it's a data point. You went straight for: "${decisionLog[0].action}." ${decisionLog[0].insight}. That's not nothing.`;
+      return;
+    }
+
+    const insights = decisionLog.map(e => e.insight);
+    const last = insights[insights.length - 1];
+    const rest = insights.slice(0, -1).join('; ');
+    textEl.textContent = `Based on where you actually spent attention, not where I pointed you: ${rest}; and ${last}. That's not a personality test. It's just what you paid attention to, which happens to be the same instrument I use on my own decisions: what someone looks at twice tells you more than what they say they care about.`;
+  }
+
+  /* ===== HIRING NOTES — synthesized once, from the whole session ===== */
+  function generateHiringNotes(){
+    if(notesGenerated) return;
+    notesGenerated = true;
+
+    const elapsedMs = Date.now() - pageLoadTime;
+    const mins = Math.floor(elapsedMs / 60000);
+    const secs = Math.floor((elapsedMs % 60000) / 1000);
+    document.getElementById('notesTime').textContent = `Time on page: ${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+
+    const openedGlide = loggedKeys.has('glide');
+    const openedCareer = loggedKeys.has('career');
+    const failureKeys = ['today-glide','today-volume','today-agency'].filter(k => loggedKeys.has(k));
+    const libKeys = [...loggedKeys].filter(k => k.startsWith('lib-'));
+
+    const a = openedGlide && openedCareer;      // every rejected idea
+    const b = failureKeys.length === 3;         // every failure
+    const c = libKeys.length >= 4;               // most of the library
+    const d = statsViewed;                       // the metrics
+
+    const items = [
+      { label: 'Explored every rejected idea, in both decisions', yes: a },
+      { label: 'Read every failure account, not just one', yes: b },
+      { label: `Sampled most of the library (${libKeys.length} of 7)`, yes: c },
+      { label: 'Engaged with the metrics above', yes: d }
+    ];
+    document.getElementById('notesChecklist').innerHTML = items.map(i =>
+      `<div class="notes-check-item ${i.yes ? 'yes' : 'no'}"><span class="notes-check-mark">${i.yes ? '✓' : '✕'}</span><span>${i.label}</span></div>`
+    ).join('');
+
+    let verdict;
+    if(decisionLog.length === 0){
+      verdict = "Insufficient signal. Candidate did not engage with any decision, failure, or library entry. Recommendation: hard to assess from behavior alone. Worth a direct conversation instead.";
+    } else if(a && b && !d){
+      verdict = "Candidate consistently gravitated toward trade-offs over outcomes. Explored both flagship decisions and every failure. Skipped the metrics entirely. Appears interested in judgment over execution. Recommendation: proceed to a product interview.";
+    } else if(a && b && d){
+      verdict = "Candidate wanted the reasoning and the proof, not one without the other. Read both decisions, every failure, and the metrics. Thorough by default. Recommendation: proceed to a product interview.";
+    } else if(!a && !b && d){
+      verdict = "Candidate went straight for the numbers. Evaluates on outcomes first, story second. Recommendation: confirm interest in the decision-making side directly, since that's what this page is built around.";
+    } else if(c && !a && !b){
+      verdict = "Candidate sampled broadly across the library rather than going deep on one case. Pattern-matching across decisions, not fact-checking a single one. Recommendation: proceed to a product interview.";
+    } else if(a && !b){
+      verdict = "Candidate checked both flagship decisions but skipped the failures. One honest example was apparently enough. Recommendation: proceed to a product interview, and ask about a failure directly.";
+    } else {
+      const yesCount = [a,b,c,d].filter(Boolean).length;
+      verdict = yesCount >= 3
+        ? "Candidate went deep on almost everything on this page. Thorough, not just curious. Recommendation: proceed to a product interview."
+        : "Candidate sampled selectively rather than reading everything. Efficient, not exhaustive. Recommendation: worth a follow-up conversation to fill in the gaps.";
+    }
+
+    document.getElementById('notesVerdict').innerHTML = decisionLog.length === 0
+      ? `<span class="verdict-line">${verdict}</span>`
+      : `<span class="verdict-tag">Observed</span><span class="verdict-line">${verdict}</span>`;
+
+    const closeEl = document.getElementById('notesClose');
+    closeEl.textContent = decisionLog.length === 0
+      ? "Fair enough. Sometimes the headline is the whole pitch. If it worked, you already know where the email address is."
+      : "That's exactly how I hope to be evaluated, not the story, the pattern underneath it.";
+  }
+
+  // decision panels on work cards
+  function toggleDecision(key, btn){
+    const panel = document.getElementById('panel-' + key);
+    const open = panel.classList.toggle('open');
+    btn.textContent = open ? 'Hide the decision' : 'See the decision';
+    trackEvent('decision_' + key + '_' + (open ? 'open' : 'close'));
+    if(open){
+      if(key === 'glide') logDecision('glide', 'Opened the Glide decision', 'you look for the call behind the outcome, not just the finished product', 'decision');
+      if(key === 'career') logDecision('career', 'Opened the CareerOS decision', "you're checking whether this generalizes, not just whether it worked once", 'decision');
+    }
+  }
+
+  // library card insight reveal
+  let libOpenCount = 0;
+  function toggleLib(card, cardKey){
+    const wasOpen = card.classList.contains('open');
+    card.classList.toggle('open');
+    if(!wasOpen){
+      libOpenCount++;
+      const name = card.querySelector('h3') ? card.querySelector('h3').textContent : 'a card';
+      logDecision('lib-' + cardKey, `Opened "${name}" in the library`, libOpenCount === 1 ? 'you read past headlines, into the actual decision' : "you're checking for a pattern across decisions, not judging on one", 'library');
+    }
+  }
+
+  // "what I'd do differently today" reveal on failure cards
+  function toggleToday(key, btn){
+    const el = document.getElementById('today-' + key);
+    const show = el.classList.toggle('show');
+    btn.textContent = show ? 'Hide' : "What I'd do differently today →";
+    if(show){
+      logDecision('today-' + key, "Opened \"what I'd do differently today\"", 'you weight growth over the war story itself', 'failure');
+    }
+  }
+
+  // The Wrong Turn Test
+  let testPick = null;
+  function pickTest(btn, choice){
+    document.querySelectorAll('#testChoices .test-choice').forEach(c => c.classList.remove('picked'));
+    btn.classList.add('picked');
+    testPick = choice;
+    document.getElementById('testAck').classList.add('show');
+    trackEvent('test_pick_' + choice);
+
+    const pickLabels = { scale: "engineering, scale", pricing: "sales, pricing", bugs: "support, bugs" };
+    const pickInsights = {
+      scale: 'your instinct reaches for systems and capacity first',
+      pricing: 'your instinct reaches for commercial explanations first',
+      bugs: 'your instinct reaches for the reported symptom first'
+    };
+    const verdictPick = document.getElementById('verdictPick');
+    if(verdictPick){ verdictPick.textContent = 'You picked: ' + pickLabels[choice] + '. In both Glide and CareerOS, that lens wasn\'t where the real cause was hiding.'; }
+    const verdictScore = document.getElementById('verdictScore');
+    if(verdictScore){ verdictScore.innerHTML = '0<small> / 2</small>'; }
+    logDecision('test', 'Picked "' + pickLabels[choice] + '" on the Wrong Turn Test', pickInsights[choice], 'test');
+  }
+
+  // scroll reveal
+  if(!prefersReduced){
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('in-view'); });
+    }, {threshold:0.12});
+    document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+  }
+
+  // mark the stats section as seen, for the Hiring Notes read
+  const statsEl = document.querySelector('.stats-grid');
+  if(statsEl){
+    const statsObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ statsViewed = true; statsObs.disconnect(); } });
+    }, {threshold:0.3});
+    statsObs.observe(statsEl);
+  }
+
+  // generate the Hiring Notes once the visitor actually reaches that section
+  const notesEl = document.getElementById('notes');
+  if(notesEl){
+    const notesObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if(e.isIntersecting){ generateHiringNotes(); notesObs.disconnect(); } });
+    }, {threshold:0.25});
+    notesObs.observe(notesEl);
+  }
+
+  // one-time nudge pointing at the Decision Log tab, shown once when the visitor reaches Work
+  const workEl = document.getElementById('work');
+  if(workEl){
+    const nudgeObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          const nudge = document.getElementById('dlogNudge');
+          nudge.classList.add('show');
+          setTimeout(() => nudge.classList.remove('show'), 6500);
+          nudgeObs.disconnect();
+        }
+      });
+    }, {threshold:0.4});
+    nudgeObs.observe(workEl);
+  }
+
+  // hero mouse-parallax (pseudo-3D depth) — kept, it's the one ambient signature moment
+  if(!prefersReduced && window.matchMedia('(min-width:901px)').matches){
+    const heroWrap = document.getElementById('heroPhotoWrap');
+    const heroSection = document.querySelector('.hero');
+    if(heroWrap && heroSection){
+      heroSection.addEventListener('mousemove', (e) => {
+        const rect = heroWrap.getBoundingClientRect();
+        const cx = rect.left + rect.width/2;
+        const cy = rect.top + rect.height/2;
+        const dx = (e.clientX - cx) / rect.width;
+        const dy = (e.clientY - cy) / rect.height;
+        heroWrap.style.transform = `rotateY(${dx*6}deg) rotateX(${-dy*6}deg)`;
+      });
+      heroSection.addEventListener('mouseleave', () => {
+        heroWrap.style.transform = 'rotateY(0) rotateX(0)';
+      });
+    }
+  }
+</script>
+
+</body>
+</html>
