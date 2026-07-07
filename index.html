@@ -7,7 +7,7 @@
 <meta name="description" content="Product Manager who finds the real bottleneck, not the obvious one. This site shows the decisions behind Glide and CareerOS, wrong turns included.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg:#050508; --surface:rgba(255,255,255,0.03); --surface-2:rgba(255,255,255,0.06);
@@ -35,9 +35,10 @@
   .btn-accent{background:var(--blue); border-color:var(--blue); color:#fff;}
   .btn:hover{border-color:var(--text-dim); transform:translateY(-2px);}
   .btn-accent:hover{background:var(--green); border-color:var(--green); color:#05070f;}
-  .btn:focus-visible, .lib-card:focus-visible, .test-choice:focus-visible, a:focus-visible, button:focus-visible{outline:2px solid var(--green); outline-offset:3px;}
+  .btn:focus-visible, .lib-card:focus-visible, .test-choice:focus-visible, a:focus-visible, button:focus-visible, .step:focus-visible, .connect-card:focus-visible, .micro-choice:focus-visible{outline:2px solid var(--green); outline-offset:3px;}
 
   /* ===== NAV ===== */
+  .scroll-progress{position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg, var(--blue), var(--green)); z-index:100; transition:width .12s ease-out;}
   nav{position:sticky; top:0; z-index:80; backdrop-filter:blur(14px); background:rgba(5,5,8,0.75); border-bottom:1px solid var(--border);}
   nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px;}
   .nav-brand{display:flex; align-items:center; gap:10px;}
@@ -56,29 +57,68 @@
 
   /* ===== HERO ===== */
   .hero{padding-top:70px; padding-bottom:70px; overflow:hidden;}
-  .hero-grid{display:grid; grid-template-columns:1.15fr 0.95fr; gap:50px; align-items:center;}
-  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:40px;} }
-  .hero-badge{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border); border-radius:100px; padding:7px 16px; font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-dim); margin-bottom:22px;}
+  .hero-grid{display:grid; grid-template-columns:1.25fr 0.95fr; gap:70px; align-items:center;}
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr; gap:40px;} .hero-evidence-card{margin-top:0;} }
   .identity-line{font-family:'JetBrains Mono',monospace; font-size:12.5px; color:var(--green); margin-bottom:16px; letter-spacing:0.02em;}
-  .hero h1{font-size:clamp(32px,4.4vw,50px); line-height:1.16; margin-bottom:18px;}
+  .hero h1{font-size:clamp(28px,3.9vw,45px); line-height:1.18; margin-bottom:32px; max-width:100%;}
   .hero h1 .hl{background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
   .hero .sub{font-size:15.5px; color:var(--text-dim); max-width:470px; margin-bottom:28px;}
   .hero-actions{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:0;}
 
   .hero-visual{position:relative; perspective:1000px;}
-  .hero-photo-wrap{position:relative; max-width:380px; margin:0 auto; transition:transform .2s ease-out;}
-  .hero-photo{width:100%; aspect-ratio:3/4; border-radius:24px; background:linear-gradient(160deg, var(--surface-2), var(--surface)); border:1px solid var(--border); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; box-shadow:0 40px 90px rgba(0,0,0,0.5); overflow:hidden; position:relative;}
-  .hero-video{width:100%; height:100%; object-fit:cover; display:block;}
-  .hero-photo svg{width:90px; height:90px; color:var(--text-dim); opacity:0.5;}
-  .hero-photo span{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--violet); text-align:center; max-width:220px; padding:0 20px;}
-  .float-badge{position:absolute; display:flex; align-items:center; gap:8px; background:rgba(10,12,20,0.85); backdrop-filter:blur(8px); border:1px solid var(--border); border-radius:100px; padding:9px 16px; font-size:12px; font-weight:700; box-shadow:0 14px 30px rgba(0,0,0,0.4); animation:floatY 5s ease-in-out infinite;}
-  .float-badge svg{width:15px; height:15px; flex-shrink:0;}
-  .float-badge.b1{top:6%; left:-8%; color:var(--blue); animation-delay:0s;}
-  .float-badge.b2{top:38%; right:-14%; color:var(--green); animation-delay:1.2s;}
-  .float-badge.b3{bottom:10%; left:-4%; color:var(--violet); animation-delay:2.4s;}
-  @keyframes floatY{0%,100%{transform:translateY(0);} 50%{transform:translateY(-10px);}}
-  @media (max-width:900px){ .float-badge.b1{left:0;} .float-badge.b2{right:0;} .float-badge.b3{left:0;} }
-  @media (prefers-reduced-motion: reduce){ .float-badge{animation:none;} }
+  .hero-kicker{display:inline-flex; align-items:center; gap:8px; border:1px solid var(--green); border-radius:100px; padding:7px 16px 7px 14px; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.08em; background:rgba(0,212,180,0.08); margin-bottom:20px;}
+  .hero-kicker-dot{width:6px; height:6px; border-radius:50%; background:var(--green); flex-shrink:0; box-shadow:0 0 0 3px rgba(0,212,180,0.18);}
+  .hero-line-pre{font-size:14px; color:var(--text-dim); font-style:italic; margin:14px 0 26px;}
+
+  /* ===== HERO EVIDENCE CARD — research artifacts, not a repeat of the notebook ===== */
+  .hero-evidence-card{max-width:430px; margin:-32px auto 0; background:var(--surface); border:1px solid var(--border); border-radius:18px; padding:0; box-shadow:0 30px 70px rgba(0,0,0,0.45); transform:rotate(1.2deg); position:relative; overflow:hidden;}
+  .hero-evidence-img{width:100%; height:auto; display:block;}
+  .hero-evidence-card::after{content:''; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 22px 22px 0; border-color:transparent var(--bg) transparent transparent; filter:drop-shadow(-2px 2px 3px rgba(0,0,0,0.35));}
+  .hero-evidence-label{display:block; font-size:9.5px; color:var(--green); text-transform:uppercase; letter-spacing:0.09em; margin-bottom:16px;}
+  .hero-evidence-row{display:flex; align-items:center; gap:12px; font-size:14px; padding:9px 0; border-bottom:1px dashed var(--border);}
+  .hero-evidence-row.payoff{font-size:16px; font-weight:700;}
+  .hero-evidence-row.payoff .txt{color:var(--text);}
+  .hero-evidence-row.payoff .mark{font-size:18px;}
+  .hero-evidence-row:last-of-type{border-bottom:none;}
+  .hero-evidence-row .mark{font-weight:900; flex-shrink:0; color:var(--green);}
+  .hero-evidence-row .txt{color:var(--text-dim); flex:1;}
+  .hero-evidence-note{font-family:'Kalam',cursive; font-size:14.5px; color:var(--amber); margin-top:16px; padding-top:14px; border-top:1px dashed var(--border); transform:rotate(-1deg); opacity:0; animation:heroIn .6s ease forwards; animation-delay:3.4s;}
+  @media (prefers-reduced-motion: reduce){ .hero-evidence-note{opacity:1; animation:none;} }
+  .hero-stamp{position:absolute; bottom:-14px; right:-10px; width:88px; height:88px; opacity:0.16; transform:rotate(-14deg); pointer-events:none; color:var(--green);}
+
+  /* ===== HERO NOTEBOOK — the one signature hero interaction ===== */
+  .hero-reveal-trigger{background:none; border:none; padding:0; margin:0; font:inherit; color:inherit; cursor:pointer; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:4px; text-decoration-color:rgba(255,255,255,0.35);}
+  .hero-reveal-trigger:hover{text-decoration-color:var(--green);}
+  .hero-notebook{max-height:0; overflow:hidden; transition:max-height .45s ease, margin .45s ease; margin-top:0;}
+  .hero-notebook.open{max-height:200px; margin-top:18px; margin-bottom:6px;}
+  .hero-notebook-row{display:flex; align-items:center; gap:12px; font-size:13.5px; padding:8px 0; border-bottom:1px dashed var(--border);}
+  .hero-notebook-row:last-child{border-bottom:none;}
+  .hero-notebook-row .v{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); width:24px; flex-shrink:0;}
+  .hero-notebook-row .txt{color:var(--text-dim); flex:1;}
+  .hero-notebook-row.wrong .txt{text-decoration:line-through; text-decoration-color:var(--danger); text-decoration-thickness:1.5px; font-family:'Kalam',cursive;}
+  .hero-notebook-row .mark{font-weight:900; flex-shrink:0;}
+  .hero-notebook-row .mark.no{color:var(--danger); font-family:'Kalam',cursive;}
+  .hero-notebook-row .mark.yes{color:var(--green);}
+
+  /* ===== HERO TOOLTIP — tiny reward for curiosity ===== */
+  .hero-tooltip{position:relative; border-bottom:1px dotted var(--text-dim); cursor:help;}
+  .hero-tooltip-bubble{position:absolute; bottom:135%; left:50%; transform:translateX(-50%); width:250px; background:rgba(8,9,14,0.97); border:1px solid var(--border); border-radius:10px; padding:11px 14px; font-size:12px; font-weight:400; font-style:normal; color:var(--text-dim); line-height:1.55; opacity:0; pointer-events:none; transition:opacity .25s; box-shadow:0 16px 34px rgba(0,0,0,0.5); text-align:left; z-index:5;}
+  .hero-tooltip:hover .hero-tooltip-bubble, .hero-tooltip:focus .hero-tooltip-bubble, .hero-tooltip.tap-open .hero-tooltip-bubble{opacity:1;}
+  @media (max-width:640px){ .hero-tooltip-bubble{width:210px; left:0; transform:none;} }
+
+  /* ===== HERO STAGGERED ENTRANCE — anticipation, not instant reveal ===== */
+  @keyframes heroIn{from{opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);}}
+  .hero-kicker, .hero-line1, .hero h1 .hl, .hero .sub, .hero-line-pre, .hero-actions, .hero-visual{opacity:0; animation:heroIn .7s ease forwards;}
+  .hero-kicker{animation-delay:.05s;}
+  .hero-line1{display:inline-block; animation-delay:.5s;}
+  .hero h1 .hl{display:inline-block; animation-delay:1.35s;}
+  .hero .sub{animation-delay:2.05s;}
+  .hero-line-pre{animation-delay:2.35s;}
+  .hero-actions{animation-delay:2.65s;}
+  .hero-visual{animation-delay:.4s;}
+  @media (prefers-reduced-motion: reduce){
+    .hero-kicker, .hero-line1, .hero h1 .hl, .hero .sub, .hero-line-pre, .hero-actions, .hero-visual{opacity:1; animation:none;}
+  }
   .scroll-indicator{display:flex; flex-direction:column; align-items:center; gap:10px; margin-top:44px; font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:0.1em; color:var(--text-dim); text-transform:uppercase;}
   .scroll-pill{width:22px; height:36px; border:1.5px solid var(--border); border-radius:100px; position:relative;}
   .scroll-pill::before{content:''; position:absolute; top:6px; left:50%; transform:translateX(-50%); width:3px; height:8px; border-radius:100px; background:var(--green); animation:scrollDot 1.8s ease-in-out infinite;}
@@ -99,6 +139,27 @@
   .step-desc{font-size:11.5px; color:var(--text-dim); max-width:120px;}
   .step-connector{flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px); margin:26px 4px 0; min-width:18px;}
   .step.kill .step-circle{border-color:var(--danger); color:var(--danger);}
+  .step{cursor:pointer;}
+  .step.locked{opacity:0.4; cursor:not-allowed;}
+  .step.locked:hover .step-circle{transform:none; box-shadow:none; border-color:var(--border);}
+  .step.done .step-circle{border-color:var(--green); color:var(--green);}
+  .step.active .step-circle{border-color:var(--green); color:var(--green); box-shadow:0 0 0 4px rgba(0,212,180,0.15);}
+  .step.kill.active .step-circle, .step.kill.done .step-circle{border-color:var(--danger); color:var(--danger); box-shadow:0 0 0 4px rgba(255,77,109,0.15);}
+
+  .step-detail-wrap{margin-top:28px; border:1px solid var(--border); border-radius:16px; background:var(--surface); padding:26px 28px; min-height:64px;}
+  .step-detail-empty{font-size:13.5px; color:var(--text-dim); margin:0;}
+  .step-detail{display:none;}
+  .step-detail.active{display:block;}
+  .step-detail-tag{display:inline-block; font-size:10.5px; color:var(--green); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px;}
+  .step-detail.kill .step-detail-tag{color:var(--danger);}
+  .step-question{font-size:16px; font-weight:800; color:var(--text); margin-bottom:10px;}
+  .step-glide{font-size:14px; color:var(--text-dim); line-height:1.6;}
+  .step-stamp{display:inline-block; font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:800; letter-spacing:0.1em; color:var(--danger); border:2px solid var(--danger); border-radius:6px; padding:4px 12px; margin-top:12px; transform:rotate(-4deg);}
+  .step-confession{font-family:'Kalam',cursive; font-size:15px; color:var(--amber); margin-top:12px;}
+
+  .framework-loop{display:none; text-align:center; font-size:13px; color:var(--text-dim); font-style:italic; margin-top:18px;}
+  .framework-loop.show{display:block;}
+  .framework-close{text-align:center; font-size:14.5px; color:var(--text-dim); margin-top:24px;}
 
   /* ===== FEATURED WORK ===== */
   .work-lead{font-size:14.5px; color:var(--text-dim); max-width:520px; margin-top:14px;}
@@ -116,12 +177,15 @@
   .work-body h3{font-size:24px; margin-bottom:4px;}
   .work-card.secondary .work-body h3{font-size:19px;}
   .work-tag{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:14px; display:block;}
+  .case-tag{display:inline-block; font-size:11px; color:var(--blue); text-transform:uppercase; letter-spacing:0.1em; font-weight:700; margin-bottom:8px;}
+  .case-question{font-size:15.5px; font-weight:700; color:var(--text); line-height:1.5; margin-bottom:10px;}
+  .case-question-label{display:block; font-size:10px; color:var(--green); text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:6px;}
   .work-body > p.hook{font-size:14.5px; color:var(--text-dim); margin-bottom:18px;}
   .work-links{display:flex; gap:12px; flex-wrap:wrap; margin-top:auto;}
   .decision-toggle{font-family:'Inter',sans-serif; font-size:13px; font-weight:700; border:1.5px solid var(--border); border-radius:100px; padding:10px 18px; background:transparent; color:var(--text); cursor:pointer;}
   .decision-toggle:hover{border-color:var(--green);}
   .decision-panel{max-height:0; overflow:hidden; transition:max-height .4s ease; margin-top:0;}
-  .decision-panel.open{max-height:600px; margin-top:18px;}
+  .decision-panel.open{max-height:2200px; margin-top:18px;}
   .decision-panel-inner{border-top:1px dashed var(--border); padding-top:16px; display:grid; gap:12px;}
   .decision-row{font-size:13px; color:var(--text-dim); line-height:1.55;}
   .decision-row strong{color:var(--text); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; display:block; margin-bottom:3px;}
@@ -134,6 +198,7 @@
   .lib-card{border:1px solid var(--border); border-radius:16px; padding:22px 20px; background:var(--surface); text-align:left; transition:transform .3s, border-color .3s; display:block; cursor:pointer; position:relative;}
   .lib-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
   .lib-icon{width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;}
+  .lib-decision-num{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:4px;}
   .lib-brand{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--green); text-transform:uppercase; letter-spacing:0.09em; display:block; margin-bottom:8px;}
   .lib-card h3{font-size:15px; font-weight:800; line-height:1.35; margin-bottom:0;}
   .lib-hook{font-size:12.5px; color:var(--text-dim); font-style:italic; line-height:1.5; margin-top:10px;}
@@ -169,14 +234,12 @@
 
   /* ===== RESUME & STATS ===== */
   .stats-block{border-top:1px solid var(--border);}
-  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr) 1.4fr; gap:14px; align-items:stretch;}
+  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:stretch;}
   @media (max-width:900px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
   .stat-card{border:1px solid var(--border); border-radius:16px; padding:22px 18px; background:var(--surface); text-align:center;}
   .stat-card .s-icon{color:var(--blue); margin:0 auto 10px;}
   .stat-num{font-size:26px; font-weight:900; letter-spacing:-0.02em;}
   .stat-lbl{font-size:11.5px; color:var(--text-dim); margin-top:4px;}
-  .stat-cta{border:1px solid var(--border); border-radius:16px; padding:22px; background:linear-gradient(135deg, rgba(30,111,255,0.1), rgba(0,212,180,0.08)); display:flex; flex-direction:column; justify-content:center; gap:14px;}
-  .stat-cta p{font-size:14.5px; font-weight:700;}
 
   /* ===== THE WRONG TURN TEST — moved after trust is earned ===== */
   .test-section{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(180deg, rgba(30,111,255,0.04), transparent);}
@@ -291,20 +354,25 @@
 
   /* ===== CONNECT — LinkedIn / Resume / Say Hello cards ===== */
   .connect-block{border-top:1px solid var(--border); padding:70px 0 60px;}
+  .connect-message{border:1px solid var(--border); border-radius:18px; background:linear-gradient(135deg, rgba(30,111,255,0.1), rgba(0,212,180,0.08)); padding:26px 30px; text-align:center; margin-bottom:24px;}
+  .connect-message p{font-size:15px; font-weight:700; color:var(--text); max-width:640px; margin:0 auto;}
   .connect-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px;}
   @media (max-width:700px){ .connect-grid{grid-template-columns:1fr;} }
-  .connect-card{border:1px solid var(--border); border-radius:22px; background:var(--surface); padding:44px 24px 38px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0; transition:transform .3s, border-color .3s;}
+  .connect-card{border:1px solid var(--border); border-radius:20px; background:var(--surface); padding:34px 20px 30px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:0; transition:transform .3s, border-color .3s;}
   .connect-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
-  .connect-icon{width:64px; height:64px; display:flex; align-items:center; justify-content:center; margin-bottom:22px;}
+  .connect-icon{width:52px; height:52px; display:flex; align-items:center; justify-content:center; margin-bottom:18px;}
   .connect-icon svg{width:100%; height:100%; display:block;}
-  .connect-card h3{font-size:17px; font-weight:800; color:#fff; margin-bottom:7px;}
-  .connect-card span{font-size:13.5px; color:var(--text-dim); font-family:'Inter',sans-serif; font-weight:400;}
+  .connect-card h3{font-size:15.5px; font-weight:800; color:#fff; margin-bottom:6px;}
+  .connect-card span{font-size:12.5px; color:var(--text-dim); font-family:'Inter',sans-serif; font-weight:400;}
 
   footer{padding:30px 0; border-top:1px solid var(--border);}
   footer p{font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
 </style>
 </head>
 <body>
+
+<div class="scroll-progress" id="scrollProgress"></div>
+
 
 <nav>
   <div class="wrap">
@@ -314,11 +382,11 @@
     </div>
     <div class="nav-links">
       <a href="#work">Work</a>
-      <a href="#thinking">Decisions</a>
-      <a href="#process">Behaviors</a>
-      <a href="#failures">Failures</a>
-      <a href="#resume">Resume</a>
-      <a href="#notes">Notes</a>
+      <a href="#thinking">Thinking</a>
+      <a href="#process">Principles</a>
+      <a href="#failures">Lessons</a>
+      <a href="#resume">Profile</a>
+      <a href="#notes">Connect</a>
     </div>
     <div class="nav-cta">
       <a class="btn btn-accent" style="padding:10px 20px; font-size:13px;" href="#contact">Let's Connect →</a>
@@ -329,11 +397,11 @@
   </div>
   <div class="mobile-menu" id="mobileMenu">
     <a href="#work">Work</a>
-    <a href="#thinking">Decisions</a>
-    <a href="#process">Behaviors</a>
-    <a href="#failures">Failures</a>
-    <a href="#resume">Resume</a>
-    <a href="#notes">Notes</a>
+    <a href="#thinking">Thinking</a>
+    <a href="#process">Principles</a>
+    <a href="#failures">Lessons</a>
+    <a href="#resume">Profile</a>
+    <a href="#notes">Connect</a>
     <a href="#contact">Let's Connect →</a>
   </div>
 </nav>
@@ -343,29 +411,30 @@
   <div class="wrap">
     <div class="hero-grid">
       <div>
-        <span class="hero-badge reveal in-view">✦ Beyond My Resume</span>
-        <h1 class="reveal in-view">You already have a theory about what's wrong here.<br><span class="hl">It's probably not the real one. Mine usually wasn't either.</span></h1>
-        <p class="sub reveal in-view">I'm Avinash, a Product Manager who finds the real bottleneck, not the obvious one. One product below took three complete rewrites before I found it. That's Glide. This site is the evidence, not the highlight reel.</p>
-        <div class="hero-actions reveal in-view">
-          <a class="btn btn-accent" href="#work">See what survived →</a>
-          <a class="btn" href="#failures">See what got killed</a>
+        <span class="hero-kicker mono"><span class="hero-kicker-dot"></span>Built for PM hiring teams.</span>
+        <h1><span class="hero-line1">You already have a theory about what's wrong here.</span><br><span class="hl">Mine was wrong. <button class="hero-reveal-trigger" onclick="toggleHeroNotebook()" id="heroNotebookBtn">Three times.</button></span></h1>
+
+        <div class="hero-notebook" id="heroNotebook">
+          <div class="hero-notebook-row wrong"><span class="v">V1</span><span class="txt">Wrong problem</span><span class="mark no">✕</span></div>
+          <div class="hero-notebook-row wrong"><span class="v">V2</span><span class="txt">Wrong audience</span><span class="mark no">✕</span></div>
+          <div class="hero-notebook-row"><span class="v">V3</span><span class="txt">The one waiting for you below</span><span class="mark yes">✓</span></div>
+        </div>
+
+        <p class="sub">Every project below exists because I was <span class="hero-tooltip" tabindex="0" onclick="this.classList.toggle('tap-open')">wrong<span class="hero-tooltip-bubble">Most products don't fail because of bad execution. They fail because the first assumption survived too long.</span></span> first.</p>
+        <p class="hero-line-pre">You'll probably disagree with at least one decision. Good. So did I.</p>
+        <div class="hero-actions">
+          <a class="btn btn-accent" href="#thinking">Challenge your product instincts →</a>
+          <a class="btn" href="#failures">Explore my wrong turns</a>
         </div>
       </div>
 
-      <div class="hero-visual reveal in-view">
-        <div class="hero-photo-wrap" id="heroPhotoWrap">
-          <div class="hero-photo">
-            <video class="hero-video" autoplay muted loop playsinline preload="metadata">
-              <source src="avinash-portrait.mp4" type="video/mp4">
-            </video>
-          </div>
-          <span class="float-badge b1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 3v4L5 15a3 3 0 003 4h8a3 3 0 003-4L15 7V3"/></svg>3 versions of Glide killed</span>
-          <span class="float-badge b2"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>1 feature killed pre-launch</span>
-          <span class="float-badge b3"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>0 bug reports on the real problem</span>
+      <div class="hero-visual">
+        <div class="hero-evidence-card" id="heroEvidenceCard">
+          <img class="hero-evidence-img" src="glide-decision-evidence.png" alt="Decision Evidence, Case 001, Glide: user interviews conducted, 3 prototypes built, 1 real bottleneck found. Turns out nobody wanted another checklist, they wanted confidence.">
         </div>
       </div>
     </div>
-    <div class="scroll-indicator reveal in-view"><span class="scroll-pill"></span>Scroll</div>
+    <div class="scroll-indicator"><span class="scroll-pill"></span>Scroll</div>
   </div>
 </section>
 
@@ -377,24 +446,98 @@
         <span class="eyebrow">My Vocabulary</span>
         <h2 class="reveal">How decisions <span class="hl">get made.</span></h2>
       </div>
-      <p class="framework-desc reveal">The chain every decision below actually went through.</p>
+      <p class="framework-desc reveal">Every project below followed this process. Not because I planned it. Because every shortcut failed.</p>
     </div>
 
     <div class="step-row reveal">
-      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div><span class="step-title">Observe</span><span class="step-desc">Watch what people actually do, not what they say.</span></div>
+      <div class="step" data-step="1" tabindex="0" role="button" aria-label="Step 1" onclick="toggleStep(1, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(1, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <span class="step-title">Observe</span>
+        <span class="step-desc">Watch what people do, not what they say.</span>
+      </div>
       <div class="step-connector"></div>
-      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div><span class="step-title">Reduce Uncertainty</span><span class="step-desc">Find the one question that actually matters.</span></div>
+      <div class="step locked" data-step="2" tabindex="0" role="button" aria-label="Step 2" onclick="toggleStep(2, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(2, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg></div>
+        <span class="step-title">Reduce Uncertainty</span>
+        <span class="step-desc">Find the one question that actually matters.</span>
+      </div>
       <div class="step-connector"></div>
-      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg></div><span class="step-title">Generate Options</span><span class="step-desc">Real alternatives, not one idea in three costumes.</span></div>
+      <div class="step locked" data-step="3" tabindex="0" role="button" aria-label="Step 3" onclick="toggleStep(3, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(3, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 10h16M10 4v16"/></svg></div>
+        <span class="step-title">Generate Options</span>
+        <span class="step-desc">One problem. Three possible futures.</span>
+      </div>
       <div class="step-connector"></div>
-      <div class="step kill"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div><span class="step-title">Kill Weak Ideas</span><span class="step-desc">Most options die here. That's the point.</span></div>
+      <div class="step kill locked" data-step="4" tabindex="0" role="button" aria-label="Step 4" onclick="toggleStep(4, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(4, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div>
+        <span class="step-title">Kill Weak Ideas</span>
+        <span class="step-desc">Most options die here. That's the point.</span>
+      </div>
       <div class="step-connector"></div>
-      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div><span class="step-title">Commit</span><span class="step-desc">Pick the trade-off. Own it in writing.</span></div>
+      <div class="step locked" data-step="5" tabindex="0" role="button" aria-label="Step 5" onclick="toggleStep(5, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(5, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <span class="step-title">Commit</span>
+        <span class="step-desc">Pick the trade-off. Own it in writing.</span>
+      </div>
       <div class="step-connector"></div>
-      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div><span class="step-title">Measure</span><span class="step-desc">One metric decided before we built.</span></div>
+      <div class="step locked" data-step="6" tabindex="0" role="button" aria-label="Step 6" onclick="toggleStep(6, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(6, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div>
+        <span class="step-title">Measure</span>
+        <span class="step-desc">Hope isn't a KPI.</span>
+      </div>
       <div class="step-connector"></div>
-      <div class="step"><div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l4-8 4 5 4-10 4 13"/></svg></div><span class="step-title">Learn</span><span class="step-desc">Feed it back in. See "Failures" below.</span></div>
+      <div class="step locked" data-step="7" tabindex="0" role="button" aria-label="Step 7" onclick="toggleStep(7, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleStep(7, this);}">
+        <div class="step-circle"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l4-8 4 5 4-10 4 13"/></svg></div>
+        <span class="step-title">Learn</span>
+        <span class="step-desc">Nothing here is final.</span>
+      </div>
     </div>
+
+    <div class="step-detail-wrap" id="stepDetailWrap">
+      <p class="step-detail-empty" id="stepDetailEmpty">Click Observe above to start. Each step unlocks the next, in the order the decisions actually happened.</p>
+
+      <div class="step-detail" data-detail="1">
+        <span class="step-detail-tag mono">Observe</span>
+        <p class="step-question">What problem are we actually solving?</p>
+        <p class="step-glide">On Glide: travelers were opening more than six tabs just to plan one trip.</p>
+      </div>
+      <div class="step-detail" data-detail="2">
+        <span class="step-detail-tag mono">Reduce Uncertainty</span>
+        <p class="step-question">What don't we know yet?</p>
+        <p class="step-glide">Was booking the pain? Or was it not knowing if the trip would even be allowed?</p>
+      </div>
+      <div class="step-detail" data-detail="3">
+        <span class="step-detail-tag mono">Generate Options</span>
+        <p class="step-question">What are three real ways this could work?</p>
+        <p class="step-glide">A comparison site. An itinerary assistant. A unified checkout.</p>
+      </div>
+      <div class="step-detail kill" data-detail="4">
+        <span class="step-detail-tag mono">Kill Weak Ideas</span>
+        <p class="step-question">Which idea sounds exciting but fails under evidence?</p>
+        <p class="step-glide">"Another comparison site."</p>
+        <p class="step-stamp">REJECTED</p>
+        <p class="step-confession">This was my favorite idea.</p>
+      </div>
+      <div class="step-detail" data-detail="5">
+        <span class="step-detail-tag mono">Commit</span>
+        <p class="step-question">Which trade-off are we willing to accept?</p>
+        <p class="step-glide">One unified flow, even if it meant rebuilding checkout from scratch.</p>
+      </div>
+      <div class="step-detail" data-detail="6">
+        <span class="step-detail-tag mono">Measure</span>
+        <p class="step-question">How will we know this worked?</p>
+        <p class="step-glide">Planning time, not signups.</p>
+      </div>
+      <div class="step-detail" data-detail="7">
+        <span class="step-detail-tag mono">Learn</span>
+        <p class="step-question">What would change our mind?</p>
+        <p class="step-glide">Visa confidence mattered more than price comparison ever did.</p>
+      </div>
+    </div>
+
+    <p class="framework-loop" id="frameworkLoop">↺ Back to Observe. Product thinking isn't linear, it just looks that way in hindsight.</p>
+
+    <p class="framework-close reveal">That's the chain behind everything below, including the parts I got wrong.</p>
 
     <div class="micro-decision reveal" id="micro-framework">
       <span class="micro-tag">Decision Moment 1 of 5</span>
@@ -412,9 +555,9 @@
 <!-- ============ FEATURED WORK — Glide is the hero ============ -->
 <section id="work" data-zone="work">
   <div class="wrap">
-    <span class="eyebrow">The Evidence</span>
-    <h2 class="reveal">Two problems <span style="color:var(--blue);">I couldn't stop thinking about.</span></h2>
-    <p class="work-lead reveal">Click "See the decision" on either one. The alternatives I rejected are the actual point, not the finished product.</p>
+    <span class="eyebrow">Featured Work</span>
+    <h2 class="reveal">Two cases <span style="color:var(--blue);">I couldn't stop thinking about.</span></h2>
+    <p class="work-lead reveal">Tap "Enter the Investigation" on either one. The alternatives I rejected are the actual point, not the finished product.</p>
 
     <div class="work-stack reveal">
       <!-- GLIDE — the hero -->
@@ -424,20 +567,23 @@
             <span class="wordmark">Glide</span>
           </button>
           <div class="work-body">
+            <span class="case-tag mono">Case 001</span>
             <h3>Glide</h3>
             <span class="work-tag">Travel super app, version 3 of 3</span>
-            <p class="hook">0 of 11 travel platforms I audited would tell you if you'd actually get a visa. Glide is the one that tries. Built solo, and the first two versions were wrong.</p>
+            <p class="case-question"><span class="case-question-label mono">The Question</span>Can travel planning become predictable instead of stressful?</p>
+            <p class="hook">0 of 11 travel platforms I audited would tell you if you'd actually get a visa.</p>
             <div class="work-links">
               <button class="btn btn-accent" style="padding:11px 20px; font-size:13px;" onclick="openGlideExp()">Enter the Glide story →</button>
               <a class="btn" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/Glide/" target="_blank" rel="noopener">Open live prototype</a>
-              <button class="decision-toggle" onclick="toggleDecision('glide', this)">See the decision</button>
+              <button class="decision-toggle" onclick="toggleDecision('glide', this)">See the investigation</button>
             </div>
             <div class="decision-panel" id="panel-glide">
               <div class="decision-panel-inner">
-                <div class="decision-row"><strong>The hard call</strong>Build a document checklist, or actually try to predict approval likelihood.</div>
-                <div class="decision-row rejected"><strong>Rejected (v1 & v2)</strong>A compliance checklist. Fast to build, felt like progress, and users kept asking anyway: "but will I actually get approved?"</div>
-                <div class="decision-row kept"><strong>Trade-off accepted (v3)</strong>Slower to build and riskier to be wrong about, but it finally answered the question people were actually asking.</div>
-                <div class="decision-row"><strong>Outcome</strong>Shipped. The version that stuck is the one that stopped being polite about the real fear.</div>
+                <div class="decision-row"><strong>Hypothesis</strong>A document checklist would resolve visa anxiety.</div>
+                <div class="decision-row"><strong>Evidence</strong>Users kept asking anyway: "but will I actually get approved?" The checklist never answered that, twice.</div>
+                <div class="decision-row kept"><strong>Decision</strong>Kill the checklist. Rebuild around a unified cart and checkout that bets on trust over paperwork.</div>
+                <div class="decision-row"><strong>Trade-off</strong>Slower to build and riskier to be wrong about, but it finally answered the real question.</div>
+                <div class="decision-row"><strong>Outcome</strong>40% fewer booking steps. Version three is the one that shipped.</div>
               </div>
             </div>
           </div>
@@ -451,12 +597,14 @@
             <span class="wordmark">CareerOS</span>
           </a>
           <div class="work-body">
+            <span class="case-tag mono">Case 002</span>
             <h3>CareerOS</h3>
             <span class="work-tag">Proof the thinking travels, not another case study</span>
-            <p class="hook">Glide proves this works in travel. CareerOS proves it isn't a fluke. Same chain, a completely different domain: my own job search, automated.</p>
+            <p class="case-question"><span class="case-question-label mono">The Question</span>Can job search coordination be automated without taking away the candidate's judgment?</p>
+            <p class="hook">The fastest workflow wasn't the one people trusted.</p>
             <div class="work-links">
               <a class="btn btn-accent" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/careeros/" target="_blank" rel="noopener">Open CareerOS →</a>
-              <button class="decision-toggle" onclick="toggleDecision('career', this)">See the decision</button>
+              <button class="decision-toggle" onclick="toggleDecision('career', this)">See the investigation</button>
             </div>
             <div class="decision-panel" id="panel-career">
               <div class="decision-panel-inner">
@@ -469,10 +617,11 @@
                   </div>
                   <p class="micro-reveal"></p>
                 </div>
-                <div class="decision-row"><strong>The hard call</strong>Whether to let CareerOS auto-apply on my behalf to maximize volume.</div>
-                <div class="decision-row rejected"><strong>Rejected</strong>Full automation, applying to every match without review. No user testing caught this. I did, before it shipped.</div>
-                <div class="decision-row kept"><strong>Trade-off accepted</strong>One extra manual step, every time, because automation should remove work, not remove my decision.</div>
-                <div class="decision-row"><strong>Outcome</strong>CareerOS automates coordination: sourcing, tailoring, follow-up cadence. It never automates the "yes."</div>
+                <div class="decision-row"><strong>Hypothesis</strong>Auto-applying to every match would maximize volume.</div>
+                <div class="decision-row"><strong>Evidence</strong>No user testing caught the problem. I did, before it shipped: automation was about to remove the user's choice, not just their work.</div>
+                <div class="decision-row kept"><strong>Decision</strong>Kill full automation. Keep one manual step at the final send, every time.</div>
+                <div class="decision-row"><strong>Trade-off</strong>Slower per application, but the candidate stays in control of every "yes."</div>
+                <div class="decision-row"><strong>Outcome</strong>CareerOS automates sourcing, tailoring, and follow-up cadence. It never automates the decision to apply.</div>
               </div>
             </div>
           </div>
@@ -492,65 +641,72 @@
     <div class="lib-grid reveal">
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'prism')" onkeydown="if(event.key==='Enter')toggleLib(this, 'prism')">
         <div class="lib-icon" style="background:rgba(30,111,255,0.14); color:var(--blue);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
+        <span class="lib-decision-num mono">Decision 01</span>
         <span class="lib-brand mono">Prism</span>
         <h3>Reimagining Practical STEM Learning</h3>
         <p class="lib-hook">What almost turned focus into anxiety?</p>
         <p class="lib-insight">Killed the streaks/gamification layer in week two. It was manufacturing anxiety, not focus.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Prism-Reimagining-Practical-STEM-Learning-Through-Immersive-Classrooms-3931d93326e981e783e5c7ed1ed617d8?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_prism')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'connections')" onkeydown="if(event.key==='Enter')toggleLib(this, 'connections')">
         <div class="lib-icon" style="background:rgba(255,111,165,0.14); color:var(--pink);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M10 10l4 4"/></svg></div>
+        <span class="lib-decision-num mono">Decision 02</span>
         <span class="lib-brand mono">Beyond Connections</span>
         <h3>Networking Beyond Connection Requests</h3>
         <p class="lib-hook">Why more connections made this worse, not better.</p>
         <p class="lib-insight">Rejected the "add more connections" model entirely. It optimized for adding people, not for anyone replying.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Beyond-Connections-3931d93326e981a79e91f4a13ae52cf7?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_connections')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'signal')" onkeydown="if(event.key==='Enter')toggleLib(this, 'signal')">
         <div class="lib-icon" style="background:rgba(0,212,180,0.14); color:var(--green);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div>
+        <span class="lib-decision-num mono">Decision 03</span>
         <span class="lib-brand mono">Signal</span>
         <h3>Signals Over Noise</h3>
         <p class="lib-hook">The dashboard everyone opened exactly once. Why?</p>
         <p class="lib-insight">The dashboard nobody opened twice. The fix wasn't more charts. It was cutting to one number.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Signals-Over-Noise-3931d93326e9810c90dae86db002cc51?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_signals')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'pulse')" onkeydown="if(event.key==='Enter')toggleLib(this, 'pulse')">
         <div class="lib-icon" style="background:rgba(255,77,109,0.14); color:var(--danger);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div>
+        <span class="lib-decision-num mono">Decision 04</span>
         <span class="lib-brand mono">Pulse</span>
         <h3>Trust Before Revenue</h3>
         <p class="lib-hook">Why revenue had to wait its turn.</p>
         <p class="lib-insight">Monetization was moved to come after trust, not before. That's the reverse of the original plan.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Trust-Before-Revenue-3931d93326e981af9a92eff02c5c626a?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_trust')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'catalyst')" onkeydown="if(event.key==='Enter')toggleLib(this, 'catalyst')">
         <div class="lib-icon" style="background:rgba(245,166,35,0.14); color:var(--amber);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1 3-6z"/></svg></div>
+        <span class="lib-decision-num mono">Decision 05</span>
         <span class="lib-brand mono">Catalyst</span>
         <h3>Beyond the First Play</h3>
         <p class="lib-hook">The first play wasn't the one that mattered. Which was?</p>
         <p class="lib-insight">The first play wasn't the moment that mattered for retention. The second one was, so we redesigned around that.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Beyond-the-First-Play-3931d93326e981428bc3e69cf84b971d?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_firstplay')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'compass')" onkeydown="if(event.key==='Enter')toggleLib(this, 'compass')">
         <div class="lib-icon" style="background:rgba(139,127,255,0.14); color:var(--violet);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
+        <span class="lib-decision-num mono">Decision 06</span>
         <span class="lib-brand mono">Compass</span>
         <h3>Scaling with Intent</h3>
         <p class="lib-hook">Three good ideas. Only one got the green light. Why?</p>
         <p class="lib-insight">Said no to scaling three decent ideas at once, so one idea got enough attention to actually work.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Scaling-with-Intent-3931d93326e981bc82aeff3454195670?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_scaling')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
       <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'canvas')" onkeydown="if(event.key==='Enter')toggleLib(this, 'canvas')">
         <div class="lib-icon" style="background:rgba(30,111,255,0.14); color:var(--blue);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
+        <span class="lib-decision-num mono">Decision 07</span>
         <span class="lib-brand mono">Canvas</span>
         <h3>Beyond the Model</h3>
         <p class="lib-hook">The model wasn't the product. So what was?</p>
         <p class="lib-insight">The model was never the product. The workflow wrapped around it was, so that's what we designed first.</p>
-        <span class="lib-hint mono">tap for the decision →</span>
+        <span class="lib-hint mono">Case sealed. Tap to open →</span>
         <div style="margin-top:10px;"><a href="https://spark-split-808.notion.site/Beyond-the-Model-3931d93326e9813ba555c9d02813b17e?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_model')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
       </div>
     </div>
@@ -683,14 +839,6 @@
         <div class="stat-num">1</div>
         <div class="stat-lbl">Obsession: finding the real bottleneck</div>
       </div>
-      <div class="stat-cta">
-        <p>You've seen how I decide, where I was wrong, and what I'd change. If that's the judgment you want on your team, let's talk.</p>
-        <a class="btn btn-accent" href="mailto:avinashvijay027@gmail.com" onclick="trackEvent('stats_contact')">Let's Connect →</a>
-      </div>
-    </div>
-
-    <div style="margin-top:18px;">
-      <button class="btn" onclick="downloadPlainResume(); trackEvent('resume_download')">Download plain-text resume</button>
     </div>
   </div>
 </section>
@@ -721,6 +869,9 @@
 <!-- ============ CONNECT — replaces the old icon row ============ -->
 <section class="connect-block" data-zone="connect">
   <div class="wrap">
+    <div class="connect-message reveal">
+      <p>You've seen how I decide, where I was wrong, and what I'd change. If that's the judgment you want on your team, let's talk.</p>
+    </div>
     <div class="connect-grid reveal">
       <a class="connect-card" href="https://linkedin.com/in/avinashr027/" target="_blank" rel="noopener" onclick="trackEvent('connect_linkedin')">
         <div class="connect-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M7.15 9.1h2.55v7.9H7.15v-7.9zM8.42 4.8a1.48 1.48 0 110 2.96 1.48 1.48 0 010-2.96zM11.3 9.1h2.45v1.08h.03c.34-.64 1.18-1.32 2.43-1.32 2.6 0 3.08 1.71 3.08 3.93v4.21h-2.55v-3.73c0-.89-.02-2.04-1.24-2.04-1.24 0-1.43.97-1.43 1.97v3.8H11.3V9.1z"/></svg></div>
@@ -834,60 +985,29 @@
 <script>
   function trackEvent(name){ console.log('[track]', name); }
 
-  function downloadPlainResume(){
-    const text = [
-'AVINASH R',
-'Bangalore, avinashvijay027@gmail.com, 8608545732',
-'linkedin.com/in/avinashr027',
-'',
-'SUMMARY',
-'Product Manager who diagnoses the bottleneck before choosing the fix. 6+ years building AI-powered features',
-'across B2B SaaS, enterprise software, and IoT products. Chose pricing experiments over added acquisition spend,',
-'PRDs over rushed builds, and workflow redesign over new headcount. Together, these decisions drove acquisition up 30%,',
-'activation up 25%, feature engagement up 35%, and paid conversion to 4.3%.',
-'',
-'EXPERIENCE',
-'',
-'Product Manager, Sportstech, Bangalore (Sep 2025 to Present)',
-'Consumer IoT subscription platform with 174K+ freemium users and 12.4K+ paid subscribers.',
-'- Prioritized AI-enabled coaching over generic promotions, growing new user acquisition by 30%.',
-'- Redesigned the device-pairing flow instead of adding tutorial content, lifting Day-1 activation by 25%.',
-'- Built the recommendation strategy for an AI coaching engine, increasing session completion by 22% and DAU by 22.4%.',
-'- Prioritized pricing experiments over further acquisition spend, lifting conversion to 4.3% and retention to 96.8%.',
-'',
-'Product Manager, GetAI (ITC Infotech), Bangalore (Apr 2024 to Sep 2025)',
-'Enterprise operations platform for manufacturing and contract management.',
-'- Shipped three AI-driven capabilities including an LLM-based clause review assistant, growing feature engagement by 35%.',
-'- Wrote detailed PRDs and release plans before development began, achieving 95% on-time release completion.',
-'- Launched analytics dashboards over ad hoc reports, cutting reporting turnaround time by 40%.',
-'',
-'Product Manager, VS Happy Infotech, Bangalore (2022 to Mar 2024)',
-'US financial services platform. Joined Feb 2020 as Team Manager; promoted to Product Manager in 2022.',
-'- Redesigned the loan onboarding funnel, lifting NPS by 20 points and cutting churn by 20%.',
-'- Chose workflow redesign over adding support staff, cutting time-to-value from 14 to 6 days.',
-'- Standardized PRDs over informal specs, improving delivery alignment across 10+ initiatives.',
-'',
-'PRODUCT EXPERIENCE',
-'Glide, Travel Super App (0 to 1 product build), independent build, sole product owner.',
-'- Mapped the travel booking journey through user interviews across visa, flight, hotel, and transport steps.',
-'- Designed a unified cart and checkout over separate flows per vertical, cutting booking steps by 40%.',
-'',
-'SKILLS',
-'Product Strategy, Discovery, Roadmapping, PRDs, MVP Definition, Pricing Strategy, Go-to-Market, PLG',
-'Generative AI, LLM Applications, AI Workflow Automation, Prompt Engineering, Recommendation Systems',
-'SQL, A/B Testing, Funnel & Retention Analysis, KPI Tracking',
-'User Interviews, Journey Mapping, Usability Testing, Figma',
-'',
-'EDUCATION',
-'BBA, Bharathidasan University, Mechanical Engineering, GPTC, Trichy',
-'Certifications: Product Management (Great Learning), Digital Product Management (UVA), Google Project Management (Coursera)'
-].join('\n');
-    const blob = new Blob([text], {type:'text/plain'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = 'avinash-resume.txt';
-    document.body.appendChild(a); a.click(); a.remove();
-    URL.revokeObjectURL(url);
+  // top scroll progress indicator
+  const scrollProgressEl = document.getElementById('scrollProgress');
+  function updateScrollProgress(){
+    if(!scrollProgressEl) return;
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    scrollProgressEl.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updateScrollProgress, { passive: true });
+  window.addEventListener('resize', updateScrollProgress);
+  updateScrollProgress();
+
+  // Hero notebook — the one signature hero interaction: click "Three times." to see the version history
+  let heroNotebookOpened = false;
+  function toggleHeroNotebook(){
+    const notebook = document.getElementById('heroNotebook');
+    const open = notebook.classList.toggle('open');
+    trackEvent('hero_notebook_' + (open ? 'open' : 'close'));
+    if(open && !heroNotebookOpened){
+      heroNotebookOpened = true;
+      logDecision('hero-notebook', 'Opened the version history in the hero', "you're curious before you even know what this site is", 'hero');
+    }
   }
 
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1039,10 +1159,52 @@
   }
 
   // decision panels on work cards
+  // Decision Framework — progressive unlock, one step reveals the next
+  let frameworkUnlocked = 1;
+  let frameworkComplete = false;
+
+  function toggleStep(n, el){
+    if(n > frameworkUnlocked) return; // still locked, ignore the click
+
+    const isActive = el.classList.contains('active');
+    document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.step-detail').forEach(d => d.classList.remove('active'));
+    const emptyMsg = document.getElementById('stepDetailEmpty');
+
+    if(isActive){
+      // closing it back up
+      if(emptyMsg) emptyMsg.style.display = 'block';
+      return;
+    }
+
+    el.classList.add('active');
+    el.classList.add('done');
+    if(emptyMsg) emptyMsg.style.display = 'none';
+    const detail = document.querySelector('.step-detail[data-detail="' + n + '"]');
+    if(detail) detail.classList.add('active');
+
+    trackEvent('framework_step_' + n);
+
+    if(n === frameworkUnlocked && frameworkUnlocked < 7){
+      frameworkUnlocked = n + 1;
+      const nextStep = document.querySelector('.step[data-step="' + frameworkUnlocked + '"]');
+      if(nextStep) nextStep.classList.remove('locked');
+    }
+
+    if(n === 7){
+      const loop = document.getElementById('frameworkLoop');
+      if(loop) loop.classList.add('show');
+      if(!frameworkComplete){
+        frameworkComplete = true;
+        logDecision('framework-complete', 'Walked through the full decision chain', 'you wanted to see the reasoning before trusting the results below', 'decision');
+      }
+    }
+  }
+
   function toggleDecision(key, btn){
     const panel = document.getElementById('panel-' + key);
     const open = panel.classList.toggle('open');
-    btn.textContent = open ? 'Hide the decision' : 'See the decision';
+    btn.textContent = open ? 'Hide the investigation' : 'See the investigation';
     trackEvent('decision_' + key + '_' + (open ? 'open' : 'close'));
     if(open){
       if(key === 'glide') logDecision('glide', 'Opened the Glide decision', 'you look for the call behind the outcome, not just the finished product', 'decision');
@@ -1129,6 +1291,8 @@
   const glideTotalScenes = document.querySelectorAll('.glide-scene').length;
   let glideScene = 0;
   let glideOpened = false;
+  let glideTimer = null;
+  const glideMicroSceneIndex = 3; // the decision-moment scene gets extra time to read
 
   // build the progress dots once
   (function buildGlideDots(){
@@ -1141,13 +1305,25 @@
     }
   })();
 
+  function clearGlideTimer(){
+    if(glideTimer){ clearTimeout(glideTimer); glideTimer = null; }
+  }
+
+  function startGlideTimer(){
+    clearGlideTimer();
+    if(glideScene >= glideTotalScenes - 1) return; // don't auto-advance past the final scene
+    const duration = glideScene === glideMicroSceneIndex ? 9000 : 5000;
+    glideTimer = setTimeout(() => { glideNext(); }, duration);
+  }
+
   function updateGlideScene(){
     document.querySelectorAll('.glide-scene').forEach((el, i) => el.classList.toggle('active', i === glideScene));
     document.querySelectorAll('.glide-dot').forEach((el, i) => el.classList.toggle('active', i === glideScene));
     const backBtn = document.getElementById('glideBackBtn');
     const nextBtn = document.getElementById('glideNextBtn');
     if(backBtn) backBtn.style.visibility = glideScene === 0 ? 'hidden' : 'visible';
-    if(nextBtn) nextBtn.textContent = glideScene === glideTotalScenes - 1 ? 'Close' : 'Continue →';
+    if(nextBtn) nextBtn.textContent = glideScene === glideTotalScenes - 1 ? 'Close' : 'Skip →';
+    startGlideTimer();
   }
 
   function openGlideExp(){
@@ -1167,6 +1343,7 @@
   function closeGlideExp(){
     const exp = document.getElementById('glideExp');
     if(!exp) return;
+    clearGlideTimer();
     exp.classList.remove('open');
     document.body.style.overflow = '';
     trackEvent('glide_experience_close');
@@ -1195,6 +1372,15 @@
     if(e.key === 'ArrowRight') glideNext();
     if(e.key === 'ArrowLeft') glidePrev();
   });
+
+  // pause the auto-advance while the visitor is actually reading or interacting
+  (function setupGlidePause(){
+    const stage = document.querySelector('.glide-exp-stage');
+    if(!stage) return;
+    stage.addEventListener('mouseenter', clearGlideTimer);
+    stage.addEventListener('mouseleave', () => { if(document.getElementById('glideExp').classList.contains('open')) startGlideTimer(); });
+    stage.addEventListener('click', () => { clearGlideTimer(); startGlideTimer(); });
+  })();
 
   // scroll reveal
   if(!prefersReduced){
@@ -1242,7 +1428,7 @@
 
   // hero mouse-parallax (pseudo-3D depth) — kept, it's the one ambient signature moment
   if(!prefersReduced && window.matchMedia('(min-width:901px)').matches){
-    const heroWrap = document.getElementById('heroPhotoWrap');
+    const heroWrap = document.getElementById('heroEvidenceCard');
     const heroSection = document.querySelector('.hero');
     if(heroWrap && heroSection){
       heroSection.addEventListener('mousemove', (e) => {
@@ -1251,10 +1437,10 @@
         const cy = rect.top + rect.height/2;
         const dx = (e.clientX - cx) / rect.width;
         const dy = (e.clientY - cy) / rect.height;
-        heroWrap.style.transform = `rotateY(${dx*6}deg) rotateX(${-dy*6}deg)`;
+        heroWrap.style.transform = `rotate(1.2deg) rotateY(${dx*6}deg) rotateX(${-dy*6}deg)`;
       });
       heroSection.addEventListener('mouseleave', () => {
-        heroWrap.style.transform = 'rotateY(0) rotateX(0)';
+        heroWrap.style.transform = 'rotate(1.2deg)';
       });
     }
   }
