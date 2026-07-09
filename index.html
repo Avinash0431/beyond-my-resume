@@ -204,18 +204,29 @@
   /* ===== PRODUCT THINKING LIBRARY ===== */
   .lib-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:36px;}
   @media (max-width:800px){ .lib-grid{grid-template-columns:repeat(2,1fr);} }
-  .lib-card{border:1px solid var(--border); border-radius:16px; padding:22px 20px; background:var(--surface); text-align:left; transition:transform .3s, border-color .3s; display:flex; flex-direction:column; height:100%; cursor:pointer; position:relative;}
-  .lib-card-writeup{margin-top:auto; padding-top:14px;}
+  @media (max-width:520px){ .lib-grid{grid-template-columns:1fr;} }
+  .lib-card{border:1px solid var(--border); border-radius:16px; padding:22px 20px; background:var(--surface); text-align:left; transition:transform .3s, border-color .3s; display:flex; flex-direction:column; height:100%; position:relative;}
   .lib-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
-  .lib-icon{width:38px; height:38px; border-radius:10px; display:flex; align-items:center; justify-content:center; margin-bottom:14px;}
-  .lib-decision-num{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:4px;}
+  .lib-card-writeup{margin-top:auto; padding-top:14px;}
+  .lib-card-writeup a{font-size:11px; font-weight:700;}
+  .lib-card-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:12px; border-bottom:1px dashed var(--border);}
+  .lib-case-num{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.08em;}
+  .lib-case-status{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--green); text-transform:uppercase; letter-spacing:0.06em; font-weight:700;}
   .lib-brand{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--green); text-transform:uppercase; letter-spacing:0.09em; display:block; margin-bottom:8px;}
-  .lib-card h3{font-size:15px; font-weight:800; line-height:1.35; margin-bottom:0;}
-  .lib-hook{font-size:12.5px; color:var(--text-dim); font-style:italic; line-height:1.5; margin-top:10px;}
-  .lib-insight{max-height:0; overflow:hidden; transition:max-height .35s ease; font-size:11.5px; color:var(--green); line-height:1.5; font-style:italic;}
-  .lib-card.open .lib-insight{max-height:120px; margin-top:10px;}
-  .lib-hint{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-top:8px; display:block;}
-  .lib-card.open .lib-hint{display:none;}
+  .lib-card h3{font-size:15px; font-weight:800; line-height:1.35; margin-bottom:12px;}
+  .lib-quote{font-size:13px; color:var(--text); font-style:italic; line-height:1.5; margin-bottom:14px; padding-left:10px; border-left:2px solid var(--green);}
+  .lib-fact{font-size:12px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;}
+  .lib-fact-label{display:block; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:3px;}
+
+  /* ===== LIBRARY ARTIFACTS — one unique physical detail per case, subtle ===== */
+  .lib-card.artifact-fold{overflow:hidden;}
+  .lib-card.artifact-fold::after{content:''; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 16px 16px 0; border-color:transparent var(--bg) transparent transparent; filter:drop-shadow(-1px 1px 2px rgba(0,0,0,0.35));}
+  .lib-card.artifact-sticky::after{content:''; position:absolute; top:-7px; right:16px; width:36px; height:24px; background:#F2D06B; opacity:0.85; transform:rotate(-7deg); box-shadow:0 4px 10px rgba(0,0,0,0.35); border-radius:1px;}
+  .lib-card.artifact-stamp::after{content:'✓'; position:absolute; bottom:16px; right:16px; width:30px; height:30px; border:2px solid var(--danger); border-radius:50%; color:var(--danger); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; transform:rotate(-12deg); opacity:0.65;}
+  .lib-margin-note{position:absolute; top:16px; right:-6px; transform:rotate(6deg); font-family:'Kalam',cursive; font-size:11.5px; color:var(--amber); opacity:0.85; pointer-events:none;}
+  .lib-card.artifact-highlight mark{background:rgba(245,166,35,0.32); color:var(--text); padding:0 3px; border-radius:2px;}
+  .lib-card.artifact-stain::before{content:''; position:absolute; bottom:12px; left:16px; width:28px; height:28px; border:3px solid rgba(180,140,90,0.3); border-radius:50%; pointer-events:none;}
+  .lib-card.artifact-clip .lib-clip-icon{position:absolute; top:-9px; left:22px; width:16px; height:26px; color:var(--text-dim); opacity:0.55; transform:rotate(6deg);}
 
   /* ===== WORKING STYLE ===== */
   .style-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:40px;}
@@ -371,12 +382,12 @@
       <span class="nav-name">AVINASH R</span>
     </div>
     <div class="nav-links">
-      <a href="#work">Work</a>
+      <a href="#work">Cases</a>
       <a href="#thinking">Thinking</a>
       <a href="#process">Principles</a>
       <a href="#failures">Lessons</a>
       <a href="#resume">Profile</a>
-      <a href="#notes">Connect</a>
+      <a href="#contact">Connect</a>
     </div>
     <div class="nav-cta">
       <a class="btn btn-accent" style="padding:10px 20px; font-size:13px;" href="#contact">Let's Connect →</a>
@@ -386,12 +397,12 @@
     </button>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#work">Work</a>
+    <a href="#work">Cases</a>
     <a href="#thinking">Thinking</a>
     <a href="#process">Principles</a>
     <a href="#failures">Lessons</a>
     <a href="#resume">Profile</a>
-    <a href="#notes">Connect</a>
+    <a href="#contact">Connect</a>
     <a href="#contact">Let's Connect →</a>
   </div>
 </nav>
@@ -629,78 +640,94 @@
   <div class="wrap">
     <span class="eyebrow">Decision Archives</span>
     <h2 class="reveal">Seven more <span style="color:var(--green);">product decisions.</span></h2>
-    <p class="work-lead reveal">Tap a card to see the actual call, not the pitch.</p>
+    <p class="work-lead reveal">Seven closed cases. The call is right there, no tapping required.</p>
 
     <div class="lib-grid reveal">
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'prism')" onkeydown="if(event.key==='Enter')toggleLib(this, 'prism')">
-        <div class="lib-icon" style="background:rgba(30,111,255,0.14); color:var(--blue);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg></div>
-        <span class="lib-decision-num mono">Decision 01</span>
+      <div class="lib-card artifact-fold">
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 01</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Prism</span>
         <h3>Reimagining Practical STEM Learning</h3>
-        <p class="lib-hook">What almost turned focus into anxiety?</p>
-        <p class="lib-insight">Killed the streaks/gamification layer in week two. It was manufacturing anxiety, not focus.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Prism-Reimagining-Practical-STEM-Learning-Through-Immersive-Classrooms-3931d93326e981e783e5c7ed1ed617d8?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_prism')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"We optimized for engagement. Students optimized for shortcuts."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Removed the gamification layer.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Anxiety down. Focus up.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Prism-Reimagining-Practical-STEM-Learning-Through-Immersive-Classrooms-3931d93326e981e783e5c7ed1ed617d8?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-prism', 'Opened the Prism investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_prism')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'connections')" onkeydown="if(event.key==='Enter')toggleLib(this, 'connections')">
-        <div class="lib-icon" style="background:rgba(255,111,165,0.14); color:var(--pink);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="16" r="3"/><path d="M10 10l4 4"/></svg></div>
-        <span class="lib-decision-num mono">Decision 02</span>
+      <div class="lib-card artifact-sticky">
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 02</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Beyond Connections</span>
         <h3>Networking Beyond Connection Requests</h3>
-        <p class="lib-hook">Why more connections made this worse, not better.</p>
-        <p class="lib-insight">Rejected the "add more connections" model entirely. It optimized for adding people, not for anyone replying.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-Connections-3931d93326e981a79e91f4a13ae52cf7?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_connections')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"More connections. Fewer replies."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Rejected the "add more connections" model entirely.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Optimized for replies, not headcount.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-Connections-3931d93326e981a79e91f4a13ae52cf7?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-connections', 'Opened the Beyond Connections investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_connections')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'signal')" onkeydown="if(event.key==='Enter')toggleLib(this, 'signal')">
-        <div class="lib-icon" style="background:rgba(0,212,180,0.14); color:var(--green);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></div>
-        <span class="lib-decision-num mono">Decision 03</span>
+      <div class="lib-card artifact-stamp">
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 03</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Signal</span>
         <h3>Signals Over Noise</h3>
-        <p class="lib-hook">The dashboard everyone opened exactly once. Why?</p>
-        <p class="lib-insight">The dashboard nobody opened twice. The fix wasn't more charts. It was cutting to one number.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Signals-Over-Noise-3931d93326e9810c90dae86db002cc51?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_signals')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"The dashboard nobody opened twice."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Cut the charts down to one number.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Opened weekly, not once.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Signals-Over-Noise-3931d93326e9810c90dae86db002cc51?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-signal', 'Opened the Signal investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_signals')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'pulse')" onkeydown="if(event.key==='Enter')toggleLib(this, 'pulse')">
-        <div class="lib-icon" style="background:rgba(255,77,109,0.14); color:var(--danger);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11z"/></svg></div>
-        <span class="lib-decision-num mono">Decision 04</span>
+      <div class="lib-card artifact-note">
+        <span class="lib-margin-note">risky call</span>
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 04</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Pulse</span>
         <h3>Trust Before Revenue</h3>
-        <p class="lib-hook">Why revenue had to wait its turn.</p>
-        <p class="lib-insight">Monetization was moved to come after trust, not before. That's the reverse of the original plan.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Trust-Before-Revenue-3931d93326e981af9a92eff02c5c626a?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_trust')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"Revenue first was the original plan."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Moved monetization after trust, not before.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Reversed the roadmap on purpose.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Trust-Before-Revenue-3931d93326e981af9a92eff02c5c626a?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-pulse', 'Opened the Pulse investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_trust')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'catalyst')" onkeydown="if(event.key==='Enter')toggleLib(this, 'catalyst')">
-        <div class="lib-icon" style="background:rgba(245,166,35,0.14); color:var(--amber);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1 3-6z"/></svg></div>
-        <span class="lib-decision-num mono">Decision 05</span>
+      <div class="lib-card artifact-highlight">
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 05</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Catalyst</span>
         <h3>Beyond the First Play</h3>
-        <p class="lib-hook">The first play wasn't the one that mattered. Which was?</p>
-        <p class="lib-insight">The first play wasn't the moment that mattered for retention. The second one was, so we redesigned around that.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-the-First-Play-3931d93326e981428bc3e69cf84b971d?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_firstplay')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"Everyone obsessed over the first play."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Redesigned around the second play instead.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span><mark>Retention</mark> followed.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-the-First-Play-3931d93326e981428bc3e69cf84b971d?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-catalyst', 'Opened the Catalyst investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_firstplay')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'compass')" onkeydown="if(event.key==='Enter')toggleLib(this, 'compass')">
-        <div class="lib-icon" style="background:rgba(139,127,255,0.14); color:var(--violet);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg></div>
-        <span class="lib-decision-num mono">Decision 06</span>
+      <div class="lib-card artifact-stain">
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 06</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Compass</span>
         <h3>Scaling with Intent</h3>
-        <p class="lib-hook">Three good ideas. Only one got the green light. Why?</p>
-        <p class="lib-insight">Said no to scaling three decent ideas at once, so one idea got enough attention to actually work.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Scaling-with-Intent-3931d93326e981bc82aeff3454195670?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_scaling')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"Three decent ideas. One team."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Said no to two of them.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>The one that shipped actually worked.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Scaling-with-Intent-3931d93326e981bc82aeff3454195670?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-compass', 'Opened the Compass investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_scaling')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card" tabindex="0" onclick="toggleLib(this, 'canvas')" onkeydown="if(event.key==='Enter')toggleLib(this, 'canvas')">
-        <div class="lib-icon" style="background:rgba(30,111,255,0.14); color:var(--blue);"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></div>
-        <span class="lib-decision-num mono">Decision 07</span>
+      <div class="lib-card artifact-clip">
+        <svg class="lib-clip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 6v9a4 4 0 01-8 0V5a2.5 2.5 0 015 0v9a1 1 0 01-2 0V7"/></svg>
+        <div class="lib-card-head">
+          <span class="lib-case-num mono">Case File 07</span>
+          <span class="lib-case-status mono">Closed ✓</span>
+        </div>
         <span class="lib-brand mono">Canvas</span>
         <h3>Beyond the Model</h3>
-        <p class="lib-hook">The model wasn't the product. So what was?</p>
-        <p class="lib-insight">The model was never the product. The workflow wrapped around it was, so that's what we designed first.</p>
-        <span class="lib-hint mono">Case sealed. Tap to open →</span>
-        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-the-Model-3931d93326e9813ba555c9d02813b17e?source=copy_link" target="_blank" rel="noopener" onclick="event.stopPropagation(); trackEvent('lib_model')" style="font-size:11px; font-weight:700;">Open full write-up →</a></div>
+        <p class="lib-quote">"Everyone wanted a better model."</p>
+        <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Designed the workflow around it first.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>The model became the easy part.</div>
+        <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-the-Model-3931d93326e9813ba555c9d02813b17e?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-canvas', 'Opened the Canvas investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_model')">Open Investigation →</a></div>
       </div>
     </div>
   </div>
@@ -813,24 +840,24 @@
 
     <div class="stats-grid reveal">
       <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg>
+        <div class="stat-num">15+</div>
+        <div class="stat-lbl">Product decisions shipped</div>
+      </div>
+      <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
+        <div class="stat-num">7</div>
+        <div class="stat-lbl">Case files documented</div>
+      </div>
+      <div class="stat-card">
+        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        <div class="stat-num">3</div>
+        <div class="stat-lbl">Ideas killed before launch</div>
+      </div>
+      <div class="stat-card">
         <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
         <div class="stat-num">6+</div>
         <div class="stat-lbl">Years finding the real bottleneck</div>
-      </div>
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg>
-        <div class="stat-num">15+</div>
-        <div class="stat-lbl">Products shipped, never the first draft</div>
-      </div>
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
-        <div class="stat-num">10M+</div>
-        <div class="stat-lbl">Users downstream of these decisions</div>
-      </div>
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-        <div class="stat-num">1</div>
-        <div class="stat-lbl">Obsession: finding the real bottleneck</div>
       </div>
     </div>
   </div>
@@ -860,7 +887,7 @@
 </section>
 
 <!-- ============ CONNECT — replaces the old icon row ============ -->
-<section class="connect-block" data-zone="connect">
+<section class="connect-block" id="contact" data-zone="connect">
   <div class="wrap">
     <div class="connect-unified reveal">
       <span class="connect-message-eyebrow mono">Ready when you are</span>
@@ -887,7 +914,7 @@
   </div>
 </section>
 
-<footer id="contact">
+<footer>
   <div class="wrap" style="text-align:center; width:100%;">
     <p>Avinash R · The PM who finds the real bottleneck, not the obvious one · Bangalore</p>
   </div>
@@ -1167,18 +1194,6 @@
     if(open){
       if(key === 'glide') logDecision('glide', 'Opened the Glide decision', 'you look for the call behind the outcome, not just the finished product', 'decision');
       if(key === 'career') logDecision('career', 'Opened the CareerOS decision', "you're checking whether this generalizes, not just whether it worked once", 'decision');
-    }
-  }
-
-  // library card insight reveal
-  let libOpenCount = 0;
-  function toggleLib(card, cardKey){
-    const wasOpen = card.classList.contains('open');
-    card.classList.toggle('open');
-    if(!wasOpen){
-      libOpenCount++;
-      const name = card.querySelector('h3') ? card.querySelector('h3').textContent : 'a card';
-      logDecision('lib-' + cardKey, `Opened "${name}" in the library`, libOpenCount === 1 ? 'you read past headlines, into the actual decision' : "you're checking for a pattern across decisions, not judging on one", 'library');
     }
   }
 
