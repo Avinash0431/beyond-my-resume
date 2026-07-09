@@ -39,14 +39,21 @@
 
   /* ===== NAV ===== */
   .scroll-progress{position:fixed; top:0; left:0; height:3px; width:0%; background:linear-gradient(90deg, var(--blue), var(--green)); z-index:100; transition:width .12s ease-out;}
-  nav{position:sticky; top:0; z-index:80; backdrop-filter:blur(14px); background:rgba(5,5,8,0.75); border-bottom:1px solid var(--border);}
-  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px;}
+  nav{position:sticky; top:0; z-index:80; backdrop-filter:blur(14px); background:rgba(5,5,8,0.75); border-bottom:1px solid var(--border); transition:background .25s ease, box-shadow .25s ease;}
+  nav.scrolled{background:rgba(5,5,8,0.92); box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; padding:18px 32px; max-width:1180px; transition:padding .25s ease;}
+  nav.scrolled .wrap{padding-top:12px; padding-bottom:12px;}
   .nav-brand{display:flex; align-items:center; gap:10px;}
-  .nav-mark{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg, var(--blue), var(--green)); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:15px; color:#05070f; flex-shrink:0;}
+  .nav-mark{width:38px; height:38px; border-radius:10px; background:linear-gradient(135deg, var(--blue), var(--green)); background-size:200% 200%; background-position:0% 50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:15px; color:#05070f; flex-shrink:0; transition:background-position 1.2s ease;}
+  .nav-brand:hover .nav-mark{background-position:100% 50%;}
   .nav-name{font-size:13.5px; font-weight:800; letter-spacing:0.04em;}
   .nav-links{display:flex; gap:30px; align-items:center;}
-  .nav-links a{font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); transition:color .2s;}
+  .nav-links a{position:relative; font-family:'JetBrains Mono',monospace; font-size:11.5px; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); transition:color .2s; padding-bottom:4px;}
+  .nav-links a::after{content:''; position:absolute; left:0; bottom:0; width:0; height:2px; background:linear-gradient(90deg, var(--blue), var(--green)); transition:width .25s ease;}
   .nav-links a:hover{color:var(--text);}
+  .nav-links a:hover::after{width:100%;}
+  .nav-links a.active{color:var(--text);}
+  .nav-links a.active::after{width:100%;}
   .nav-cta{display:none; align-items:center; gap:8px;}
   @media (min-width:901px){ .nav-cta{display:inline-flex;} }
   .nav-burger{display:none; width:38px; height:38px; border:1px solid var(--border); border-radius:8px; background:transparent; color:var(--text); cursor:pointer;}
@@ -142,11 +149,10 @@
   .framework-desc{font-size:14.5px; color:var(--text-dim);}
   .step-row{display:flex; align-items:flex-start; gap:0; overflow-x:auto; padding-bottom:10px;}
   .step{display:flex; flex-direction:column; align-items:center; text-align:center; min-width:118px; flex-shrink:0;}
-  .step-circle{width:52px; height:52px; border-radius:50%; border:1.5px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:center; color:var(--blue); margin-bottom:12px; transition:transform .3s, border-color .3s, box-shadow .3s;}
+  .step-circle{width:52px; height:52px; border-radius:50%; border:1.5px solid var(--border); background:radial-gradient(circle at 30% 30%, var(--surface-2), var(--surface)); display:flex; align-items:center; justify-content:center; color:var(--blue); margin-bottom:12px; transition:transform .3s, border-color .3s, box-shadow .3s;}
   .step:hover .step-circle{transform:translateY(-4px) scale(1.06); border-color:var(--blue); box-shadow:0 12px 26px rgba(30,111,255,0.25);}
   .step-title{font-size:13px; font-weight:800; margin-bottom:5px;}
-  .step-desc{font-size:11.5px; color:var(--text-dim); max-width:120px;}
-  .step-connector{flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px); margin:26px 4px 0; min-width:18px;}
+  .step-desc{font-size:11.5px; color:var(--text-dim); max-width:120px; line-height:1.5;}
   .step.kill .step-circle{border-color:var(--danger); color:var(--danger);}
   .step{cursor:pointer;}
   .step.locked{opacity:0.4; cursor:not-allowed;}
@@ -155,7 +161,11 @@
   .step.active .step-circle{border-color:var(--green); color:var(--green); box-shadow:0 0 0 4px rgba(0,212,180,0.15);}
   .step.kill.active .step-circle, .step.kill.done .step-circle{border-color:var(--danger); color:var(--danger); box-shadow:0 0 0 4px rgba(255,77,109,0.15);}
 
-  .step-detail-wrap{margin-top:28px; border:1px solid var(--border); border-radius:16px; background:var(--surface); padding:26px 28px; min-height:64px;}
+  .step-connector{flex:1; height:1px; background:repeating-linear-gradient(90deg, var(--border) 0 6px, transparent 6px 12px); margin:26px 4px 0; min-width:18px; position:relative; overflow:hidden;}
+  .step-connector::after{content:''; position:absolute; inset:0; background:linear-gradient(90deg, var(--green), var(--blue)); transform:scaleX(0); transform-origin:left; transition:transform .4s ease;}
+  .step-connector.filled::after{transform:scaleX(1);}
+
+  .step-detail-wrap{margin-top:28px; border:1px solid var(--border); border-left:3px solid var(--green); border-radius:16px; background:linear-gradient(135deg, var(--surface), rgba(0,212,180,0.03)); padding:26px 28px; min-height:64px; box-shadow:0 16px 40px rgba(0,0,0,0.2);}
   .step-detail-empty{font-size:13.5px; color:var(--text-dim); margin:0;}
   .step-detail{display:none;}
   .step-detail.active{display:block;}
@@ -180,6 +190,8 @@
   .work-preview{aspect-ratio:16/11; background:radial-gradient(circle at 30% 20%, rgba(30,111,255,0.22), transparent 60%), radial-gradient(circle at 80% 80%, rgba(0,212,180,0.2), transparent 60%), var(--bg); display:flex; align-items:center; justify-content:center; position:relative; border-right:1px solid var(--border); width:100%; min-width:0; padding:0; font-family:inherit;}
   @media (max-width:800px){ .work-preview{border-right:none; border-bottom:1px solid var(--border);} }
   .work-preview .wordmark{font-size:clamp(30px,5vw,46px); font-weight:900; letter-spacing:-0.03em; background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  .work-preview-tap{position:absolute; bottom:16px; left:50%; transform:translateX(-50%); font-size:11px; color:var(--text-dim); background:rgba(5,5,8,0.7); border:1px solid var(--border); border-radius:100px; padding:6px 14px; opacity:1; transition:opacity .25s, background .25s;}
+  .work-preview:hover .work-preview-tap{background:rgba(5,5,8,0.9); border-color:var(--green); color:var(--text);}
   .work-card.secondary .work-preview{aspect-ratio:16/9;}
   .work-card.secondary .work-preview .wordmark{font-size:clamp(24px,3.6vw,32px);}
   .work-body{padding:30px 30px 28px; display:flex; flex-direction:column; min-width:0;}
@@ -218,49 +230,98 @@
   .lib-fact{font-size:12px; color:var(--text-dim); line-height:1.5; margin-bottom:8px;}
   .lib-fact-label{display:block; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:3px;}
 
-  /* ===== LIBRARY ARTIFACTS — one unique physical detail per case, subtle ===== */
-  .lib-card.artifact-fold{overflow:hidden;}
-  .lib-card.artifact-fold::after{content:''; position:absolute; top:0; right:0; width:0; height:0; border-style:solid; border-width:0 16px 16px 0; border-color:transparent var(--bg) transparent transparent; filter:drop-shadow(-1px 1px 2px rgba(0,0,0,0.35));}
-  .lib-card.artifact-sticky::after{content:''; position:absolute; top:-7px; right:16px; width:36px; height:24px; background:#F2D06B; opacity:0.85; transform:rotate(-7deg); box-shadow:0 4px 10px rgba(0,0,0,0.35); border-radius:1px;}
-  .lib-card.artifact-stamp::after{content:'✓'; position:absolute; bottom:16px; right:16px; width:30px; height:30px; border:2px solid var(--danger); border-radius:50%; color:var(--danger); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:13px; transform:rotate(-12deg); opacity:0.65;}
-  .lib-margin-note{position:absolute; top:16px; right:-6px; transform:rotate(6deg); font-family:'Kalam',cursive; font-size:11.5px; color:var(--amber); opacity:0.85; pointer-events:none;}
-  .lib-card.artifact-highlight mark{background:rgba(245,166,35,0.32); color:var(--text); padding:0 3px; border-radius:2px;}
-  .lib-card.artifact-stain::before{content:''; position:absolute; bottom:12px; left:16px; width:28px; height:28px; border:3px solid rgba(180,140,90,0.3); border-radius:50%; pointer-events:none;}
-  .lib-card.artifact-clip .lib-clip-icon{position:absolute; top:-9px; left:22px; width:16px; height:26px; color:var(--text-dim); opacity:0.55; transform:rotate(6deg);}
-
   /* ===== WORKING STYLE ===== */
   .style-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:40px;}
   @media (max-width:800px){ .style-grid{grid-template-columns:1fr 1fr;} }
   @media (max-width:520px){ .style-grid{grid-template-columns:1fr;} }
-  .style-card{border:1px solid var(--border); border-radius:16px; padding:22px; background:var(--surface);}
-  .style-tag{font-family:'JetBrains Mono',monospace; font-size:10.5px; color:var(--green); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:12px; display:block;}
-  .style-card p{font-size:14px; color:var(--text); font-weight:600; line-height:1.5;}
+  .style-card{border:1px solid var(--border); border-radius:16px; padding:22px; background:var(--surface); transition:transform .3s, border-color .3s;}
+  .style-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
+  .style-strike{display:block; font-family:'Kalam',cursive; font-size:19px; font-weight:700; color:var(--text-dim); text-decoration:line-through; text-decoration-color:var(--danger); text-decoration-thickness:2px; margin-bottom:14px; opacity:0.75;}
+  .style-card p{font-size:14px; color:var(--text); font-weight:600; line-height:1.5; position:relative; padding-left:16px;}
+  .style-card p::before{content:'→'; position:absolute; left:0; top:0; color:var(--green);}
 
   /* ===== LESSONS FROM FAILURE ===== */
   .lesson-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:40px;}
   @media (max-width:900px){ .lesson-grid{grid-template-columns:1fr;} }
-  .lesson-card{border:1px solid var(--border); border-radius:18px; overflow:hidden; background:var(--surface); display:flex; flex-direction:column; height:100%;}
-  .lesson-top{padding:20px 22px 0;}
-  .lesson-num{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--danger); margin-bottom:12px; display:block;}
-  .lesson-card h3{font-size:17px; margin-bottom:10px;}
-  .lesson-card .story{font-size:13.5px; color:var(--text-dim); margin-bottom:18px;}
-  .lesson-bottom{background:var(--surface-2); padding:16px 22px; border-top:1px solid var(--border); font-size:12.5px;}
-  .lesson-bottom strong{color:var(--green); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; display:block; margin-bottom:4px;}
-  .lesson-bottom span{color:var(--text-dim);}
-  .lesson-today{padding:14px 22px 20px; font-size:12.5px; color:var(--text-dim); border-top:1px dashed var(--border); display:none;}
+  .lesson-card{border:1px solid var(--border); border-radius:18px; background:var(--surface); display:flex; flex-direction:column; height:100%; padding:22px 22px 0; transition:transform .3s, border-color .3s;}
+  .lesson-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
+  .lesson-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:12px; border-bottom:1px dashed var(--border);}
+  .lesson-case-num{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--danger); text-transform:uppercase; letter-spacing:0.08em;}
+  .lesson-case-tag{font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em;}
+  .lesson-card h3{font-size:16px; margin-bottom:12px;}
+  .lesson-quote{font-size:13px; color:var(--text); font-style:italic; line-height:1.5; margin-bottom:14px; padding-left:10px; border-left:2px solid var(--danger);}
+  .lesson-fact{font-size:12px; color:var(--text-dim); line-height:1.5; margin-bottom:16px;}
+  .lesson-fact-label{display:block; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--green); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:3px;}
+  .lesson-today{font-size:12px; color:var(--text-dim); line-height:1.5; padding-top:14px; border-top:1px dashed var(--border); display:none; margin-bottom:16px;}
   .lesson-today.show{display:block;}
-  .lesson-today strong{color:var(--blue); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; display:block; margin-bottom:4px;}
-  .lesson-more{width:100%; margin-top:auto; background:transparent; border:none; border-top:1px solid var(--border); color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; padding:12px; cursor:pointer;}
+  .lesson-today .lesson-fact-label{color:var(--blue);}
+  .lesson-more{width:100%; margin-top:auto; background:transparent; border:none; border-top:1px solid var(--border); color:var(--text-dim); font-family:'JetBrains Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.06em; padding:14px 0; cursor:pointer;}
   .lesson-more:hover{color:var(--text);}
 
   /* ===== RESUME & STATS ===== */
-  .stats-block{border-top:1px solid var(--border);}
-  .stats-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; align-items:stretch;}
-  @media (max-width:900px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
-  .stat-card{border:1px solid var(--border); border-radius:16px; padding:22px 18px; background:var(--surface); text-align:center;}
-  .stat-card .s-icon{color:var(--blue); margin:0 auto 10px;}
-  .stat-num{font-size:26px; font-weight:900; letter-spacing:-0.02em;}
-  .stat-lbl{font-size:11.5px; color:var(--text-dim); margin-top:4px;}
+  /* ===== HIRING BRIEF — bridges Hiring Notes and Connect ===== */
+  .brief-block{border-top:1px solid var(--border);}
+  .brief-eyebrow-num{display:inline-flex; align-items:center; gap:10px; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:20px;}
+  .brief-eyebrow-num i{width:26px; height:1px; background:var(--green); display:inline-block; font-style:normal;}
+
+  .brief-hero-row{display:grid; grid-template-columns:1fr 2.5fr; gap:24px; align-items:start; margin-bottom:30px;}
+  @media (max-width:1000px){ .brief-hero-row{grid-template-columns:1fr;} }
+
+  .brief-h2{font-size:clamp(28px,4vw,38px); line-height:1.18; font-weight:900; margin-bottom:20px;}
+  .brief-h2 .hl{background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+
+  .brief-stat-line{font-size:13px; color:var(--text-dim); margin-bottom:18px;}
+  .brief-stat-line strong{color:var(--text); font-weight:800;}
+  .brief-stat-sep{color:var(--border);}
+
+  .brief-quote-card{border:1px solid var(--border); border-left:3px solid var(--green); border-radius:16px; background:var(--surface); padding:22px 20px 20px; position:relative; margin-bottom:18px;}
+  .brief-quote-mark{position:absolute; top:12px; left:18px; font-family:Georgia,serif; font-size:30px; color:var(--green); opacity:0.5; line-height:1;}
+  .brief-cta{display:inline-flex; padding:11px 20px; font-size:13px;}
+  .brief-quote-p1{font-size:13.5px; color:var(--text-dim); line-height:1.5; padding-left:24px; margin-bottom:8px;}
+  .brief-quote-p2{font-size:13.5px; color:var(--green); font-weight:700; line-height:1.5; padding-left:24px;}
+
+  .brief-mindset-wrap{display:flex; flex-direction:column; gap:14px;}
+
+  .brief-hero-card{border:1.5px solid var(--green); border-radius:18px; background:linear-gradient(135deg, rgba(0,212,180,0.1), var(--surface)); padding:26px 28px; display:flex; align-items:center; gap:28px; flex-wrap:wrap;}
+  .brief-hero-card-left{display:flex; align-items:center; gap:16px; flex-shrink:0; min-width:240px;}
+  .brief-hero-icon{width:52px; height:52px; border-radius:14px; background:rgba(0,212,180,0.16); display:flex; align-items:center; justify-content:center; color:var(--green); flex-shrink:0;}
+  .brief-hero-badge{display:inline-block; font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.07em; color:var(--green); background:rgba(0,212,180,0.16); padding:4px 10px; border-radius:100px; margin-bottom:8px;}
+  .brief-hero-card h3{font-size:21px; font-weight:900; line-height:1.3; color:var(--text);}
+  .brief-hero-card-right{flex:1; min-width:280px;}
+  .brief-hero-list{list-style:none; display:flex; flex-wrap:wrap; gap:8px 22px; margin-bottom:14px;}
+  .brief-hero-list li{font-size:13px; color:var(--text-dim); padding-left:16px; position:relative;}
+  .brief-hero-list li::before{content:'•'; position:absolute; left:0; color:var(--green);}
+
+  .brief-support-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media (max-width:900px){ .brief-support-grid{grid-template-columns:repeat(2,1fr);} .brief-hero-card{padding:22px;} }
+  @media (max-width:560px){ .brief-support-grid{grid-template-columns:1fr;} .brief-hero-card-left{min-width:100%;} }
+  .brief-mindset-card{border:1px solid var(--border); border-radius:16px; background:var(--surface); padding:22px 18px; display:flex; flex-direction:column; height:100%; transition:transform .3s, border-color .3s;}
+  .brief-mindset-card:hover{transform:translateY(-4px); border-color:rgba(255,255,255,0.2);}
+  .brief-mindset-icon{margin-bottom:16px;}
+  .brief-mindset-card h3{font-size:16px; font-weight:800; line-height:1.35; margin-bottom:14px; color:var(--text);}
+  .brief-mindset-list{list-style:none; display:flex; flex-direction:column; gap:8px; margin-bottom:16px; flex:1;}
+  .brief-mindset-list li{font-size:12px; color:var(--text-dim); line-height:1.5; padding-left:14px; position:relative;}
+  .brief-mindset-list li::before{content:'•'; position:absolute; left:0; color:var(--text-dim);}
+  .brief-mindset-tag{display:inline-flex; align-items:center; font-size:10.5px; font-weight:700; margin-top:auto; padding:7px 10px; border-radius:100px; width:fit-content; white-space:nowrap;}
+
+  .brief-table-label{display:flex; align-items:center; gap:10px; font-size:14px; color:var(--text-dim); margin:8px 0 20px;}
+  .brief-table-line{width:120px; height:1px; background:linear-gradient(90deg, var(--green), transparent); display:inline-block;}
+  .brief-table-label svg{color:var(--green);}
+
+  .brief-closing-bar{display:flex; border:1px solid var(--border); border-radius:16px; background:var(--surface); overflow:hidden; flex-wrap:wrap;}
+  .brief-closing-left{flex:1; min-width:260px; display:flex; align-items:center; gap:12px; padding:20px 24px;}
+  .brief-closing-left svg{flex-shrink:0;}
+  .brief-closing-left p{font-size:14px; color:var(--text-dim); line-height:1.5; margin:0;}
+  .brief-closing-left strong{color:var(--green); font-weight:700;}
+  .brief-closing-right{flex:1; min-width:260px; padding:20px 24px; border-left:1px dashed var(--border);}
+  .brief-rec-label{display:block; font-size:10px; color:var(--green); text-transform:uppercase; letter-spacing:0.07em; margin-bottom:10px;}
+  .brief-rec-list{list-style:none; display:flex; flex-direction:column; gap:6px; margin-bottom:10px;}
+  .brief-rec-list li{font-size:13px; color:var(--text-dim); padding-left:20px; position:relative;}
+  .brief-rec-list li::before{content:'✓'; position:absolute; left:0; color:var(--green); font-weight:700;}
+  .brief-rec-verdict{font-size:13.5px; color:var(--text-dim); margin:0;}
+  .brief-rec-verdict strong{color:var(--text);}
+  @media (max-width:800px){ .brief-closing-right{border-left:none; border-top:1px dashed var(--border);} }
+
 
   /* ===== THE WRONG TURN TEST — moved after trust is earned ===== */
   .test-section{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(180deg, rgba(30,111,255,0.04), transparent);}
@@ -293,8 +354,10 @@
   .decision-panel-inner .micro-decision{margin-top:0;}
 
   /* ===== GLIDE EXPERIENCE — full-screen cinematic sequence ===== */
-  .glide-exp{position:fixed; inset:0; width:100vw; height:100vh; z-index:200; background:var(--bg); background-image:radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px); background-size:26px 26px; display:none; flex-direction:column; padding:60px 24px 32px; box-sizing:border-box;}
+  .glide-exp{position:fixed; inset:0; width:100vw; height:100vh; z-index:200; background:rgba(3,4,8,0.72); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:24px; box-sizing:border-box;}
   .glide-exp.open{display:flex;}
+  .glide-exp-card{width:100%; max-width:760px; max-height:88vh; background:var(--bg); background-image:radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px); background-size:26px 26px; border:1px solid var(--border); border-radius:24px; box-shadow:0 40px 100px rgba(0,0,0,0.6); display:flex; flex-direction:column; padding:44px 32px 28px; box-sizing:border-box; position:relative; overflow:hidden;}
+  @media (max-width:640px){ .glide-exp{padding:12px;} .glide-exp-card{padding:40px 18px 20px; max-height:92vh;} .glide-scene{padding:6px;} }
   .glide-exp-close{position:absolute; top:22px; right:24px; width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text); font-size:16px; cursor:pointer; z-index:2; transition:border-color .2s;}
   .glide-exp-close:hover{border-color:var(--text-dim);}
   .glide-exp-progress{display:flex; justify-content:center; gap:8px; margin-bottom:36px; flex-shrink:0;}
@@ -315,7 +378,6 @@
   .glide-metric-row{display:flex; gap:34px; margin-top:24px; justify-content:center; flex-wrap:wrap;}
   .glide-metric .num{font-size:30px; font-weight:900; color:var(--green); letter-spacing:-0.02em;}
   .glide-metric .lbl{font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:4px;}
-  @media (max-width:640px){ .glide-exp{padding:52px 16px 24px;} .glide-scene{padding:6px;} }
   @media (prefers-reduced-motion: reduce){ .glide-scene{transition:none;} }
   .verdict-score{font-size:clamp(56px,10vw,100px); font-weight:900; letter-spacing:-0.04em; color:var(--danger); line-height:0.9; margin-bottom:6px;}
   .verdict-score small{font-size:0.32em; color:var(--text-dim); font-weight:700;}
@@ -352,19 +414,38 @@
   @media (max-width:700px){ .notes-doc-body{padding:22px;} .notes-doc-head{padding:18px 22px;} }
 
   /* ===== CONNECT — one unified card with LinkedIn / Email / Resume inside it ===== */
+  /* ===== CONNECT — Let's have a real conversation ===== */
   .connect-block{border-top:1px solid var(--border); padding:70px 0 60px;}
-  .connect-unified{border:1.5px solid var(--green); border-radius:24px; background:linear-gradient(135deg, rgba(30,111,255,0.14), rgba(0,212,180,0.12)); padding:44px 40px; text-align:center; box-shadow:0 20px 60px rgba(0,212,180,0.1);}
-  @media (max-width:640px){ .connect-unified{padding:30px 22px;} }
   .connect-message-eyebrow{display:block; font-size:10.5px; color:var(--green); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:14px;}
-  .connect-unified-msg{font-size:18px; font-weight:700; color:var(--text); max-width:640px; margin:0 auto; line-height:1.55;}
-  .connect-options{display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:34px; padding-top:34px; border-top:1px dashed rgba(255,255,255,0.15);}
-  @media (max-width:700px){ .connect-options{grid-template-columns:1fr; gap:12px;} }
-  .connect-option{border:1px solid var(--border); border-radius:18px; background:rgba(5,5,8,0.5); padding:26px 18px 24px; display:flex; flex-direction:column; align-items:center; text-align:center; transition:transform .3s, border-color .3s, background .3s;}
-  .connect-option:hover{transform:translateY(-4px); border-color:var(--green); background:rgba(5,5,8,0.75);}
-  .connect-icon{width:48px; height:48px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;}
-  .connect-icon svg{width:100%; height:100%; display:block;}
-  .connect-option h3{font-size:15px; font-weight:800; color:#fff; margin-bottom:5px;}
-  .connect-option span{font-size:12px; color:var(--text-dim); font-family:'Inter',sans-serif; font-weight:400;}
+  .talk-grid{display:grid; grid-template-columns:0.85fr 1.3fr 0.85fr; gap:28px; align-items:start;}
+  @media (max-width:1000px){ .talk-grid{grid-template-columns:1fr; } .talk-notebook{order:1;} .talk-intro{order:0;} .talk-contacts{order:2;} }
+
+  .talk-intro h2{font-size:clamp(24px,3.2vw,32px); line-height:1.25; margin:6px 0 20px;}
+  .talk-intro h2 .hl, .talk-close .hl{background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;}
+  .talk-lines{font-size:14.5px; color:var(--text-dim); line-height:1.7; margin-bottom:16px;}
+  .talk-close{font-size:16px; font-weight:700; color:var(--text);}
+
+  .talk-notebook{display:grid; grid-template-columns:1fr 1fr; background:linear-gradient(160deg, #e8e2d5, #d8d0bd); border-radius:16px; box-shadow:0 30px 70px rgba(0,0,0,0.5); overflow:hidden; position:relative;}
+  .talk-notebook::before{content:''; position:absolute; left:50%; top:0; bottom:0; width:1px; background:repeating-linear-gradient(0deg, rgba(0,0,0,0.15) 0 6px, transparent 6px 12px); transform:translateX(-50%);}
+  .talk-page{padding:26px 24px;}
+  .talk-page-label{display:block; font-size:9.5px; color:#0a6f5c; text-transform:uppercase; letter-spacing:0.08em; font-weight:700; margin-bottom:16px; border-bottom:1px solid rgba(0,0,0,0.12); padding-bottom:10px;}
+  .talk-ask-item{display:flex; align-items:center; gap:12px; font-size:13px; color:#2a2a28; font-weight:600; margin-bottom:16px;}
+  .talk-handwritten{font-family:'Kalam',cursive; font-size:13.5px; color:#8a6d1a; line-height:1.5; margin-top:18px; padding-top:14px; border-top:1px dashed rgba(0,0,0,0.15); transform:rotate(-1deg);}
+  .talk-ask-icon{width:24px; height:24px; border-radius:6px; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; flex-shrink:0;}
+  .talk-quote{font-family:'Kalam',cursive; font-size:14.5px; color:#2a2a28; line-height:1.6; margin-bottom:16px;}
+  .talk-signature{font-size:13px; font-weight:800; color:#2a2a28;}
+  .talk-signature span{display:block; font-size:11px; font-weight:400; color:#6a6a64; margin-top:2px;}
+  @media (max-width:640px){ .talk-notebook{grid-template-columns:1fr;} .talk-notebook::before{display:none;} .talk-page-left{border-bottom:1px dashed rgba(0,0,0,0.15);} }
+
+  .talk-contacts{display:flex; flex-direction:column; gap:10px;}
+  .talk-contact{display:flex; align-items:center; gap:12px; border:1px solid var(--border); border-radius:14px; background:var(--surface); padding:14px 16px; transition:transform .25s, border-color .25s;}
+  .talk-contact:hover{transform:translateX(4px); border-color:var(--green);}
+  .talk-contact-icon{width:34px; height:34px; flex-shrink:0;}
+  .talk-contact-icon svg{width:100%; height:100%;}
+  .talk-contact-text{flex:1; display:flex; flex-direction:column; font-size:11.5px; color:var(--text-dim); line-height:1.4; min-width:0;}
+  .talk-contact-text strong{font-size:13.5px; color:var(--text); font-weight:800;}
+  .talk-contact-arrow{color:var(--text-dim); flex-shrink:0; transition:transform .25s;}
+  .talk-contact:hover .talk-contact-arrow{transform:translateX(3px); color:var(--green);}
 
   footer{padding:30px 0; border-top:1px solid var(--border);}
   footer p{font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
@@ -381,28 +462,26 @@
       <div class="nav-mark">AR</div>
       <span class="nav-name">AVINASH R</span>
     </div>
-    <div class="nav-links">
-      <a href="#work">Cases</a>
-      <a href="#thinking">Thinking</a>
-      <a href="#process">Principles</a>
-      <a href="#failures">Lessons</a>
-      <a href="#resume">Profile</a>
-      <a href="#contact">Connect</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#thinking" data-nav="thinking">Thinking</a>
+      <a href="#work" data-nav="work">Cases</a>
+      <a href="#process" data-nav="process">Principles</a>
+      <a href="#failures" data-nav="failures">Lessons</a>
+      <a href="#resume" data-nav="resume">Profile</a>
     </div>
     <div class="nav-cta">
-      <a class="btn btn-accent" style="padding:10px 20px; font-size:13px;" href="#contact">Let's Connect →</a>
+      <a class="btn btn-accent" style="padding:8px 14px; font-size:13px;" href="#contact">Let's Connect →</a>
     </div>
     <button class="nav-burger" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
     </button>
   </div>
   <div class="mobile-menu" id="mobileMenu">
-    <a href="#work">Cases</a>
     <a href="#thinking">Thinking</a>
+    <a href="#work">Cases</a>
     <a href="#process">Principles</a>
     <a href="#failures">Lessons</a>
     <a href="#resume">Profile</a>
-    <a href="#contact">Connect</a>
     <a href="#contact">Let's Connect →</a>
   </div>
 </nav>
@@ -569,6 +648,7 @@
         <div class="work-hero">
           <button class="work-preview" style="border:none; cursor:pointer;" onclick="openGlideExp()" aria-label="Enter the Glide story">
             <span class="wordmark">Glide</span>
+            <span class="work-preview-tap mono">Tap to enter the Glide story →</span>
           </button>
           <div class="work-body">
             <span class="case-tag mono">Case 001</span>
@@ -577,8 +657,7 @@
             <p class="case-question"><span class="case-question-label mono">The Question</span>Can travel planning become predictable instead of stressful?</p>
             <p class="hook">0 of 11 travel platforms I audited would tell you if you'd actually get a visa.</p>
             <div class="work-links">
-              <button class="btn btn-accent" style="padding:11px 20px; font-size:13px;" onclick="openGlideExp()">Enter the Glide story →</button>
-              <a class="btn" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/Glide/" target="_blank" rel="noopener">Open live prototype</a>
+              <a class="btn btn-accent" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/Glide/" target="_blank" rel="noopener">Enter the full case study →</a>
               <button class="decision-toggle" onclick="toggleDecision('glide', this)">See the investigation</button>
             </div>
             <div class="decision-panel" id="panel-glide">
@@ -607,7 +686,7 @@
             <p class="case-question"><span class="case-question-label mono">The Question</span>Can job search coordination be automated without taking away the candidate's judgment?</p>
             <p class="hook">The fastest workflow wasn't the one people trusted.</p>
             <div class="work-links">
-              <a class="btn btn-accent" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/careeros/" target="_blank" rel="noopener">Open CareerOS →</a>
+              <a class="btn btn-accent" style="padding:11px 20px; font-size:13px;" href="https://avinash0431.github.io/careeros/" target="_blank" rel="noopener">Enter the full case study →</a>
               <button class="decision-toggle" onclick="toggleDecision('career', this)">See the investigation</button>
             </div>
             <div class="decision-panel" id="panel-career">
@@ -640,10 +719,10 @@
   <div class="wrap">
     <span class="eyebrow">Decision Archives</span>
     <h2 class="reveal">Seven more <span style="color:var(--green);">product decisions.</span></h2>
-    <p class="work-lead reveal">Seven closed cases. The call is right there, no tapping required.</p>
+    <p class="work-lead reveal">The same chain you saw in Glide and CareerOS, showing up seven more times, in seven different products.</p>
 
     <div class="lib-grid reveal">
-      <div class="lib-card artifact-fold">
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 01</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -655,7 +734,7 @@
         <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Anxiety down. Focus up.</div>
         <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Prism-Reimagining-Practical-STEM-Learning-Through-Immersive-Classrooms-3931d93326e981e783e5c7ed1ed617d8?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-prism', 'Opened the Prism investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_prism')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card artifact-sticky">
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 02</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -667,7 +746,7 @@
         <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Optimized for replies, not headcount.</div>
         <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-Connections-3931d93326e981a79e91f4a13ae52cf7?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-connections', 'Opened the Beyond Connections investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_connections')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card artifact-stamp">
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 03</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -679,8 +758,7 @@
         <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Opened weekly, not once.</div>
         <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Signals-Over-Noise-3931d93326e9810c90dae86db002cc51?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-signal', 'Opened the Signal investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_signals')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card artifact-note">
-        <span class="lib-margin-note">risky call</span>
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 04</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -692,7 +770,7 @@
         <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Reversed the roadmap on purpose.</div>
         <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Trust-Before-Revenue-3931d93326e981af9a92eff02c5c626a?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-pulse', 'Opened the Pulse investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_trust')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card artifact-highlight">
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 05</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -701,10 +779,10 @@
         <h3>Beyond the First Play</h3>
         <p class="lib-quote">"Everyone obsessed over the first play."</p>
         <div class="lib-fact"><span class="lib-fact-label mono">Decision Made</span>Redesigned around the second play instead.</div>
-        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span><mark>Retention</mark> followed.</div>
+        <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>Retention followed.</div>
         <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Beyond-the-First-Play-3931d93326e981428bc3e69cf84b971d?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-catalyst', 'Opened the Catalyst investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_firstplay')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card artifact-stain">
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 06</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -716,8 +794,7 @@
         <div class="lib-fact"><span class="lib-fact-label mono">Outcome</span>The one that shipped actually worked.</div>
         <div class="lib-card-writeup"><a href="https://spark-split-808.notion.site/Scaling-with-Intent-3931d93326e981bc82aeff3454195670?source=copy_link" target="_blank" rel="noopener" onclick="logDecision('lib-compass', 'Opened the Compass investigation', 'you\'re checking the case, not just skimming the summary', 'library'); trackEvent('lib_scaling')">Open Investigation →</a></div>
       </div>
-      <div class="lib-card artifact-clip">
-        <svg class="lib-clip-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 6v9a4 4 0 01-8 0V5a2.5 2.5 0 015 0v9a1 1 0 01-2 0V7"/></svg>
+      <div class="lib-card">
         <div class="lib-card-head">
           <span class="lib-case-num mono">Case File 07</span>
           <span class="lib-case-status mono">Closed ✓</span>
@@ -741,12 +818,12 @@
     <p class="work-lead reveal">"Collaborative" and "data-driven" mean nothing until they're a behavior. Here's what they turn into on my team.</p>
 
     <div class="style-grid reveal">
-      <div class="style-card"><span class="style-tag">Instead of "collaborative"</span><p>I involve engineering before requirements become expensive to change.</p></div>
-      <div class="style-card"><span class="style-tag">Instead of "data-driven"</span><p>I don't ship a feature until I know which single metric will prove it worked.</p></div>
-      <div class="style-card"><span class="style-tag">Instead of "user-centric"</span><p>I ask what happens if we're wrong before I ask what happens if we're right.</p></div>
-      <div class="style-card"><span class="style-tag">Instead of "decisive"</span><p>I'll say "I don't know yet" out loud rather than fake a yes or no for comfort.</p></div>
-      <div class="style-card"><span class="style-tag">Instead of "scrappy"</span><p>I ship the smallest version that can actually be proven wrong, not the safest one.</p></div>
-      <div class="style-card"><span class="style-tag">Instead of "strategic"</span><p>I say no to three good ideas so one gets enough attention to actually work.</p></div>
+      <div class="style-card"><span class="style-strike">Collaborative</span><p>I involve engineering before requirements become expensive to change.</p></div>
+      <div class="style-card"><span class="style-strike">Data-driven</span><p>I don't ship a feature until I know which single metric will prove it worked.</p></div>
+      <div class="style-card"><span class="style-strike">User-centric</span><p>I ask what happens if we're wrong before I ask what happens if we're right.</p></div>
+      <div class="style-card"><span class="style-strike">Decisive</span><p>I'll say "I don't know yet" out loud rather than fake a yes or no for comfort.</p></div>
+      <div class="style-card"><span class="style-strike">Scrappy</span><p>I ship the smallest version that can actually be proven wrong, not the safest one.</p></div>
+      <div class="style-card"><span class="style-strike">Strategic</span><p>I say no to three good ideas so one gets enough attention to actually work.</p></div>
     </div>
 
     <div class="micro-decision reveal" id="micro-workingstyle">
@@ -781,33 +858,36 @@
 
     <div class="lesson-grid reveal">
       <div class="lesson-card">
-        <div class="lesson-top">
-          <span class="lesson-num">01. Glide</span>
-          <h3>Compliance ≠ Trust</h3>
-          <p class="story">I built a document checklist to resolve visa anxiety. Users kept asking "but will I actually get approved?" A checklist never answered that.</p>
+        <div class="lesson-head">
+          <span class="lesson-case-num mono">Failure 01</span>
+          <span class="lesson-case-tag mono">Glide</span>
         </div>
-        <div class="lesson-bottom"><strong>Lesson</strong><span>A checklist satisfies the rule. It doesn't touch the fear behind it.</span></div>
-        <div class="lesson-today" id="today-glide"><strong>Today I'd do</strong><span>Prototype the prediction, however rough, before the checklist. Even a bad guess answers the real question better than a perfect form.</span></div>
+        <h3>Compliance ≠ Trust</h3>
+        <p class="lesson-quote">"Users kept asking 'but will I actually get approved?' A checklist never answered that."</p>
+        <div class="lesson-fact"><span class="lesson-fact-label mono">Lesson</span>A checklist satisfies the rule. It doesn't touch the fear behind it.</div>
+        <div class="lesson-today" id="today-glide"><span class="lesson-fact-label mono">Today I'd Do</span>Prototype the prediction, however rough, before the checklist. Even a bad guess answers the real question better than a perfect form.</div>
         <button class="lesson-more" onclick="toggleToday('glide', this)">What I'd do differently today →</button>
       </div>
       <div class="lesson-card">
-        <div class="lesson-top">
-          <span class="lesson-num">02. CareerOS</span>
-          <h3>Volume Isn't a Strategy</h3>
-          <p class="story">I optimized for more applications. 12 applications, 0 replies, in 4 days closed that question fast.</p>
+        <div class="lesson-head">
+          <span class="lesson-case-num mono">Failure 02</span>
+          <span class="lesson-case-tag mono">CareerOS</span>
         </div>
-        <div class="lesson-bottom"><strong>Lesson</strong><span>Signal-to-noise beats raw effort, every time.</span></div>
-        <div class="lesson-today" id="today-volume"><strong>Today I'd do</strong><span>Set the "reply rate," not "applications sent," as the one metric before writing a line of code.</span></div>
+        <h3>Volume Isn't a Strategy</h3>
+        <p class="lesson-quote">"12 applications, 0 replies, in 4 days closed that question fast."</p>
+        <div class="lesson-fact"><span class="lesson-fact-label mono">Lesson</span>Signal-to-noise beats raw effort, every time.</div>
+        <div class="lesson-today" id="today-volume"><span class="lesson-fact-label mono">Today I'd Do</span>Set the "reply rate," not "applications sent," as the one metric before writing a line of code.</div>
         <button class="lesson-more" onclick="toggleToday('volume', this)">What I'd do differently today →</button>
       </div>
       <div class="lesson-card">
-        <div class="lesson-top">
-          <span class="lesson-num">03. CareerOS</span>
-          <h3>Automating Away Agency</h3>
-          <p class="story">I designed auto-apply on a candidate's behalf. No user testing caught this one. I did, and killed it before it shipped.</p>
+        <div class="lesson-head">
+          <span class="lesson-case-num mono">Failure 03</span>
+          <span class="lesson-case-tag mono">CareerOS</span>
         </div>
-        <div class="lesson-bottom"><strong>Lesson</strong><span>Automation should remove work, not remove the user's decision.</span></div>
-        <div class="lesson-today" id="today-agency"><strong>Today I'd do</strong><span>Write the one-line "who decides?" test into the spec on day one, not catch it in review.</span></div>
+        <h3>Automating Away Agency</h3>
+        <p class="lesson-quote">"No user testing caught this one. I did, and killed it before it shipped."</p>
+        <div class="lesson-fact"><span class="lesson-fact-label mono">Lesson</span>Automation should remove work, not remove the user's decision.</div>
+        <div class="lesson-today" id="today-agency"><span class="lesson-fact-label mono">Today I'd Do</span>Write the one-line "who decides?" test into the spec on day one, not catch it in review.</div>
         <button class="lesson-more" onclick="toggleToday('agency', this)">What I'd do differently today →</button>
       </div>
     </div>
@@ -827,38 +907,6 @@
       <p class="verdict-log-title mono">Your Decision Log</p>
       <div class="verdict-log-chips" id="verdictLogChips"></div>
       <p class="verdict-log-text" id="verdictLogText">You haven't opened anything yet, so there's nothing to read into. Scroll back up and click a decision panel. This section fills in once you have.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ============ RESUME & STATS ============ -->
-<section class="stats-block" id="resume">
-  <div class="wrap">
-    <span class="eyebrow">Resume & More</span>
-    <h2 class="reveal">Everything else, right here.</h2>
-    <p class="work-lead" style="margin-bottom:34px;">Work experience, education, skills, and the plain-text version for your ATS.</p>
-
-    <div class="stats-grid reveal">
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 7v10l9 4 9-4V7"/></svg>
-        <div class="stat-num">15+</div>
-        <div class="stat-lbl">Product decisions shipped</div>
-      </div>
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h6"/></svg>
-        <div class="stat-num">7</div>
-        <div class="stat-lbl">Case files documented</div>
-      </div>
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-        <div class="stat-num">3</div>
-        <div class="stat-lbl">Ideas killed before launch</div>
-      </div>
-      <div class="stat-card">
-        <svg class="s-icon" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
-        <div class="stat-num">6+</div>
-        <div class="stat-lbl">Years finding the real bottleneck</div>
-      </div>
     </div>
   </div>
 </section>
@@ -886,28 +934,139 @@
   </div>
 </section>
 
-<!-- ============ CONNECT — replaces the old icon row ============ -->
+<!-- ============ WHY HIRE ME — bridges Hiring Notes and Connect ============ -->
+<section class="brief-block" id="resume">
+  <div class="wrap">
+    <span class="brief-eyebrow-num mono">Hiring Brief <i></i></span>
+
+    <div class="brief-hero-row">
+      <div class="brief-hero-left">
+        <h2 class="brief-h2">Why I'll be a<br><span class="hl">great PM</span><br>for your team.</h2>
+        <p class="brief-stat-line"><strong>6+</strong> Years <span class="brief-stat-sep">·</span> <strong>15+</strong> Decisions <span class="brief-stat-sep">·</span> <strong>7</strong> Case Files</p>
+        <div class="brief-quote-card">
+          <span class="brief-quote-mark">&ldquo;</span>
+          <p class="brief-quote-p1">The strongest PMs I've worked with weren't the ones with the best ideas.</p>
+          <p class="brief-quote-p2">They were the ones who changed their minds when the evidence changed.</p>
+        </div>
+      </div>
+
+      <div class="brief-mindset-wrap">
+        <div class="brief-hero-card">
+          <div class="brief-hero-card-left">
+            <div class="brief-hero-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></div>
+            <div>
+              <span class="brief-hero-badge">The Central Theme</span>
+              <h3>I solve the <span style="color:var(--green);">right problems.</span></h3>
+            </div>
+          </div>
+          <div class="brief-hero-card-right">
+            <ul class="brief-hero-list">
+              <li>I find the real bottleneck before building solutions.</li>
+              <li>I question assumptions and define problems clearly.</li>
+              <li>I bring structure to ambiguity and noise.</li>
+            </ul>
+            <span class="brief-mindset-tag" style="color:var(--green); background:rgba(0,212,180,0.12);">First Principles →</span>
+          </div>
+        </div>
+
+        <div class="brief-support-grid">
+          <div class="brief-mindset-card">
+            <div class="brief-mindset-icon" style="color:var(--violet);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></div>
+            <h3>I drive clarity<br><span style="color:var(--violet);">and alignment.</span></h3>
+            <ul class="brief-mindset-list">
+              <li>I translate user needs into product strategy.</li>
+              <li>I align stakeholders with evidence, not opinions.</li>
+              <li>I make complex things simple and actionable.</li>
+            </ul>
+            <span class="brief-mindset-tag" style="color:var(--violet); background:rgba(139,127,255,0.12);">Systems Thinker →</span>
+          </div>
+          <div class="brief-mindset-card">
+            <div class="brief-mindset-icon" style="color:var(--blue);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+            <h3>I deliver impact<br><span style="color:var(--blue);">through execution.</span></h3>
+            <ul class="brief-mindset-list">
+              <li>I focus on outcomes, not outputs.</li>
+              <li>I prioritize ruthlessly and iterate fast.</li>
+              <li>I measure what matters and learn continuously.</li>
+            </ul>
+            <span class="brief-mindset-tag" style="color:var(--blue); background:rgba(30,111,255,0.12);">Outcome Obsessed →</span>
+          </div>
+          <div class="brief-mindset-card">
+            <div class="brief-mindset-icon" style="color:var(--danger);"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.35-9.5-9C.5 8 2 4 6 4c2 0 3.5 1 4 2 .5-1 2-2 4-2 4 0 5.5 4 3.5 8-2.5 4.65-9.5 9-9.5 9z"/></svg></div>
+            <h3>I care about the<br><span style="color:var(--danger);">outcome &amp; the user.</span></h3>
+            <ul class="brief-mindset-list">
+              <li>I design with empathy and real user value.</li>
+              <li>I own the outcome as if it's my own.</li>
+              <li>I build products people love and trust.</li>
+            </ul>
+            <span class="brief-mindset-tag" style="color:var(--danger); background:rgba(255,77,109,0.12);">User Obsessive →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="brief-table-label"><span class="brief-table-line"></span>Here's what I bring to the table.<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5z"/></svg></p>
+
+    <div class="brief-closing-bar reveal">
+      <div class="brief-closing-left">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--green)"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5z"/></svg>
+        <p>You should hire me if you want a PM who <strong>thinks deeply, acts fast, and cares deeply.</strong></p>
+      </div>
+      <div class="brief-closing-right">
+        <span class="brief-rec-label mono">Hiring Recommendation</span>
+        <ul class="brief-rec-list">
+          <li>Strong discovery mindset</li>
+          <li>Comfortable with ambiguity</li>
+          <li>Makes evidence-based decisions</li>
+        </ul>
+        <p class="brief-rec-verdict">Recommendation: <strong>Interview.</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ============ CONNECT — Let's have a real conversation ============ -->
 <section class="connect-block" id="contact" data-zone="connect">
   <div class="wrap">
-    <div class="connect-unified reveal">
-      <span class="connect-message-eyebrow mono">Ready when you are</span>
-      <p class="connect-unified-msg">You've seen how I decide, where I was wrong, and what I'd change.<br>If that's the judgment you want on your team, let's talk.</p>
+    <div class="talk-grid reveal">
+      <div class="talk-intro">
+        <span class="connect-message-eyebrow mono">Before We Meet</span>
+        <h2>Let's have a <span class="hl">real conversation.</span></h2>
+        <p class="talk-lines">You've seen my thinking.<br>You've seen my decisions.<br>You've seen my mistakes.</p>
+        <p class="talk-close">The only thing left is a <span class="hl">conversation.</span></p>
+      </div>
 
-      <div class="connect-options">
-        <a class="connect-option" href="https://linkedin.com/in/avinashr027/" target="_blank" rel="noopener" onclick="trackEvent('connect_linkedin')">
-          <div class="connect-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M7.15 9.1h2.55v7.9H7.15v-7.9zM8.42 4.8a1.48 1.48 0 110 2.96 1.48 1.48 0 010-2.96zM11.3 9.1h2.45v1.08h.03c.34-.64 1.18-1.32 2.43-1.32 2.6 0 3.08 1.71 3.08 3.93v4.21h-2.55v-3.73c0-.89-.02-2.04-1.24-2.04-1.24 0-1.43.97-1.43 1.97v3.8H11.3V9.1z"/></svg></div>
-          <h3>LinkedIn</h3>
-          <span>Connect</span>
+      <div class="talk-notebook">
+        <div class="talk-page talk-page-left">
+          <span class="talk-page-label mono">Ask Me About</span>
+          <div class="talk-ask-item"><span class="talk-ask-icon" style="background:rgba(30,111,255,0.16); color:var(--blue);">1</span><span>Why Glide almost failed</span></div>
+          <div class="talk-ask-item"><span class="talk-ask-icon" style="background:rgba(0,212,180,0.16); color:var(--green);">2</span><span>The feature I killed before launch</span></div>
+          <div class="talk-ask-item"><span class="talk-ask-icon" style="background:rgba(245,166,35,0.16); color:var(--amber);">3</span><span>The metric I stopped chasing</span></div>
+          <div class="talk-ask-item"><span class="talk-ask-icon" style="background:rgba(139,127,255,0.16); color:var(--violet);">4</span><span>The decision I'd still make differently</span></div>
+          <p class="talk-handwritten">Don't ask me what went right.<br>Ask me what almost failed.</p>
+        </div>
+        <div class="talk-page talk-page-right">
+          <span class="talk-page-label mono">Let's Build Something Great Together</span>
+          <p class="talk-quote">"I care about finding the real bottleneck before building, not the comfortable one. If that's the kind of thinking you want on your team, I'd love to talk."</p>
+          <p class="talk-signature">Avinash R<br><span>Product Manager</span></p>
+        </div>
+      </div>
+
+      <div class="talk-contacts">
+        <a class="talk-contact" href="https://linkedin.com/in/avinashr027/" target="_blank" rel="noopener" onclick="trackEvent('connect_linkedin')">
+          <div class="talk-contact-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0A66C2"/><path fill="#fff" d="M7.15 9.1h2.55v7.9H7.15v-7.9zM8.42 4.8a1.48 1.48 0 110 2.96 1.48 1.48 0 010-2.96zM11.3 9.1h2.45v1.08h.03c.34-.64 1.18-1.32 2.43-1.32 2.6 0 3.08 1.71 3.08 3.93v4.21h-2.55v-3.73c0-.89-.02-2.04-1.24-2.04-1.24 0-1.43.97-1.43 1.97v3.8H11.3V9.1z"/></svg></div>
+          <span class="talk-contact-text"><strong>LinkedIn</strong>/avinashr027</span>
+          <svg class="talk-contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a class="connect-option" href="mailto:avinashvijay027@gmail.com" onclick="trackEvent('connect_email')">
-          <div class="connect-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#fff"/><path fill="#4285F4" d="M4.5 6.5v11a1 1 0 001 1h1.2V8.9L4.5 6.5z"/><path fill="#34A853" d="M19.5 6.5v11a1 1 0 01-1 1h-1.2V8.9l2.2-2.4z"/><path fill="#FBBC05" d="M4.5 6.5l1.4-1.2h12.2l1.4 1.2-9.5 6.6-9.5-6.6z"/><path fill="#EA4335" d="M6.7 8.9v9.6h10.6V8.9L12 12.9 6.7 8.9z"/></svg></div>
-          <h3>Say Hello</h3>
-          <span>Email me</span>
+        <a class="talk-contact" href="avinash-resume.pdf" target="_blank" rel="noopener" onclick="trackEvent('connect_resume')">
+          <div class="talk-contact-icon"><svg viewBox="0 0 24 24"><path fill="#F5A623" d="M3 6.5A2 2 0 015 4.5h4.2l1.8 2h8A2 2 0 0121 8.5v9.2a2 2 0 01-2 2H5a2 2 0 01-2-2v-11z"/></svg></div>
+          <span class="talk-contact-text"><strong>Resume PDF</strong>Download</span>
+          <svg class="talk-contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
-        <a class="connect-option" href="avinash-resume.pdf" target="_blank" rel="noopener" onclick="trackEvent('connect_resume')">
-          <div class="connect-icon"><svg viewBox="0 0 24 24"><path fill="#F5A623" d="M3 6.5A2 2 0 015 4.5h4.2l1.8 2h8A2 2 0 0121 8.5v9.2a2 2 0 01-2 2H5a2 2 0 01-2-2v-11z"/></svg></div>
-          <h3>Resume</h3>
-          <span>View or download</span>
+        <a class="talk-contact" href="mailto:avinashvijay027@gmail.com" onclick="trackEvent('connect_email')">
+          <div class="talk-contact-icon"><svg viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#fff"/><path fill="#4285F4" d="M4.5 6.5v11a1 1 0 001 1h1.2V8.9L4.5 6.5z"/><path fill="#34A853" d="M19.5 6.5v11a1 1 0 01-1 1h-1.2V8.9l2.2-2.4z"/><path fill="#FBBC05" d="M4.5 6.5l1.4-1.2h12.2l1.4 1.2-9.5 6.6-9.5-6.6z"/><path fill="#EA4335" d="M6.7 8.9v9.6h10.6V8.9L12 12.9 6.7 8.9z"/></svg></div>
+          <span class="talk-contact-text"><strong>Email Me</strong>avinashvijay027@gmail.com</span>
+          <svg class="talk-contact-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </a>
       </div>
     </div>
@@ -925,7 +1084,8 @@
   <img src="glide-decision-evidence.png" alt="Decision Evidence, Case 001, Glide, full size">
 </div>
 
-<div class="glide-exp" id="glideExp">
+<div class="glide-exp" id="glideExp" onclick="if(event.target===this)closeGlideExp()">
+<div class="glide-exp-card">
   <button class="glide-exp-close" onclick="closeGlideExp()" aria-label="Close">✕</button>
   <div class="glide-exp-progress" id="glideDots"></div>
   <div class="glide-exp-stage">
@@ -1001,6 +1161,7 @@
     <button class="btn btn-accent" id="glideNextBtn" onclick="glideNext()">Continue →</button>
   </div>
 </div>
+</div>
 
 <script>
   function trackEvent(name){ console.log('[track]', name); }
@@ -1030,6 +1191,32 @@
   window.addEventListener('scroll', updateScrollProgress, { passive: true });
   window.addEventListener('resize', updateScrollProgress);
   updateScrollProgress();
+
+  // nav scroll state — shrinks and darkens once the page has scrolled a bit
+  const navEl = document.querySelector('nav');
+  function updateNavScrollState(){
+    if(!navEl) return;
+    navEl.classList.toggle('scrolled', (window.scrollY || document.documentElement.scrollTop) > 40);
+  }
+  window.addEventListener('scroll', updateNavScrollState, { passive: true });
+  updateNavScrollState();
+
+  // nav active-section indicator
+  const navLinkEls = document.querySelectorAll('#navLinks a[data-nav]');
+  const navSpySections = ['thinking', 'work', 'process', 'failures', 'resume']
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if(navLinkEls.length && navSpySections.length){
+    const navSpyObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          const id = entry.target.id;
+          navLinkEls.forEach(a => a.classList.toggle('active', a.dataset.nav === id));
+        }
+      });
+    }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+    navSpySections.forEach(sec => navSpyObs.observe(sec));
+  }
 
   // Hero notebook — the one signature hero interaction: click "Three times." to see the version history
   let heroNotebookOpened = false;
@@ -1168,6 +1355,11 @@
     const detail = document.querySelector('.step-detail[data-detail="' + n + '"]');
     if(detail) detail.classList.add('active');
 
+    const nextConnector = el.nextElementSibling;
+    if(nextConnector && nextConnector.classList.contains('step-connector')){
+      nextConnector.classList.add('filled');
+    }
+
     trackEvent('framework_step_' + n);
 
     if(n === frameworkUnlocked && frameworkUnlocked < 7){
@@ -1295,7 +1487,7 @@
     const backBtn = document.getElementById('glideBackBtn');
     const nextBtn = document.getElementById('glideNextBtn');
     if(backBtn) backBtn.style.visibility = glideScene === 0 ? 'hidden' : 'visible';
-    if(nextBtn) nextBtn.textContent = glideScene === glideTotalScenes - 1 ? 'Close' : 'Skip →';
+    if(nextBtn) nextBtn.textContent = glideScene === glideTotalScenes - 1 ? 'Close' : 'Continue →';
     startGlideTimer();
   }
 
@@ -1366,7 +1558,7 @@
   }
 
   // mark the stats section as seen, for the Hiring Notes read
-  const statsEl = document.querySelector('.stats-grid');
+  const statsEl = document.querySelector('.brief-mindset-wrap');
   if(statsEl){
     const statsObs = new IntersectionObserver((entries) => {
       entries.forEach(e => { if(e.isIntersecting){ statsViewed = true; statsObs.disconnect(); } });
