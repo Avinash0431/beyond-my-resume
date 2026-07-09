@@ -259,6 +259,100 @@
   .lesson-more:hover{color:var(--text);}
 
   /* ===== RESUME & STATS ===== */
+  /* ===== THE WRONG TURN TEST — moved after trust is earned ===== */
+  .test-section{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(180deg, rgba(30,111,255,0.04), transparent);}
+  .test-eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--danger); border:1px solid var(--danger); border-radius:100px; padding:6px 16px; margin-bottom:20px;}
+  .test-intro{font-size:13.5px; color:var(--text-dim); max-width:560px; margin-bottom:22px;}
+  .test-question{font-size:clamp(20px,3vw,27px); font-weight:800; line-height:1.4; max-width:620px; margin-bottom:28px;}
+  .test-choices{display:flex; gap:12px; flex-wrap:wrap;}
+  .test-choice{border:1.5px solid var(--border); border-radius:100px; padding:13px 22px; background:var(--surface); color:var(--text); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:all .2s;}
+  .test-choice:hover{border-color:var(--blue);}
+  .test-choice.picked{border-color:var(--green); background:rgba(0,212,180,0.1);}
+  .test-ack{margin-top:20px; font-size:14px; color:var(--green); font-style:italic; display:none;}
+  .test-ack.show{display:block;}
+
+  .verdict-block{border-top:1px solid var(--border); background:#000;}
+  .verdict-block .wrap{text-align:center;}
+
+  /* ===== MICRO DECISION — reusable inline forced-choice, scattered through the site ===== */
+  .micro-decision{border:1px solid var(--border); border-radius:16px; padding:24px 26px; background:var(--surface); margin-top:30px; text-align:left;}
+  .micro-tag{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--danger); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; display:block;}
+  .micro-q{font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:16px; line-height:1.5;}
+  .micro-choices{display:flex; gap:10px; flex-wrap:wrap;}
+  .micro-choice{border:1.5px solid var(--border); border-radius:100px; padding:10px 18px; background:transparent; color:var(--text); font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer; transition:all .2s;}
+  .micro-choice:hover{border-color:var(--blue);}
+  .micro-decision.answered .micro-choice:not(.picked){opacity:0.4;}
+  .micro-choice.picked{border-color:var(--green); background:rgba(0,212,180,0.1);}
+  .micro-decision.missed .micro-choice.picked{border-color:var(--danger); background:rgba(255,77,109,0.1);}
+  .micro-reveal{margin-top:16px; padding-top:16px; border-top:1px dashed var(--border); font-size:13.5px; color:var(--text-dim); line-height:1.6; display:none;}
+  .micro-reveal.show{display:block;}
+  .micro-decision.matched .micro-reveal{color:var(--green);}
+  .decision-panel-inner .micro-decision{margin-top:0;}
+
+  /* ===== GLIDE EXPERIENCE — full-screen cinematic sequence ===== */
+  .glide-exp{position:fixed; inset:0; width:100vw; height:100vh; z-index:200; background:rgba(3,4,8,0.72); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:24px; box-sizing:border-box;}
+  .glide-exp.open{display:flex;}
+  .glide-exp-card{width:100%; max-width:760px; height:min(680px, 88vh); max-height:88vh; background:var(--bg); background-image:radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px); background-size:26px 26px; border:1px solid var(--border); border-radius:24px; box-shadow:0 40px 100px rgba(0,0,0,0.6); display:flex; flex-direction:column; padding:44px 32px 28px; box-sizing:border-box; position:relative; overflow:hidden;}
+  @media (max-width:640px){ .glide-exp{padding:12px;} .glide-exp-card{padding:40px 18px 20px; height:92vh; max-height:92vh;} .glide-scene{padding:6px;} }
+  .glide-exp-close{position:absolute; top:22px; right:24px; width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text); font-size:16px; cursor:pointer; z-index:2; transition:border-color .2s;}
+  .glide-exp-close:hover{border-color:var(--text-dim);}
+  .glide-exp-progress{display:flex; justify-content:center; gap:8px; margin-bottom:36px; flex-shrink:0;}
+  .glide-dot{width:7px; height:7px; border-radius:50%; background:var(--border); transition:background .3s, transform .3s;}
+  .glide-dot.active{background:var(--green); transform:scale(1.4);}
+  .glide-exp-stage{flex:1; position:relative; display:flex; align-items:center; justify-content:center; max-width:680px; margin:0 auto; width:100%; min-height:0; overflow-y:auto;}
+  .glide-scene{position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; overflow-y:auto; padding:10px;}
+  .glide-scene.active{display:flex; opacity:1; transform:translateY(0);}
+  .glide-eyebrow{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:18px;}
+  .glide-scene h3{font-size:clamp(22px,4vw,36px); line-height:1.3; margin-bottom:16px;}
+  .glide-scene p{font-size:15.5px; color:var(--text-dim); max-width:540px; line-height:1.65;}
+  .glide-scene-icon{color:var(--green); margin-bottom:20px; opacity:0.9;}
+  .glide-scene-lead{font-size:14px; color:var(--text-dim); font-style:italic; max-width:480px; margin-bottom:22px;}
+  .glide-quote{font-size:clamp(20px,3.2vw,28px); font-weight:700; font-style:italic; color:var(--text); line-height:1.4; max-width:560px; margin-bottom:18px;}
+  .glide-caption{font-size:14px; color:var(--text-dim); max-width:520px; line-height:1.6;}
+  .glide-wordmark{font-size:clamp(46px,9vw,86px); font-weight:900; letter-spacing:-0.03em; background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:18px;}
+  .glide-exp-nav{display:flex; justify-content:space-between; align-items:center; max-width:680px; margin:26px auto 0; width:100%; flex-shrink:0;}
+  .glide-metric-row{display:flex; gap:34px; margin-top:24px; justify-content:center; flex-wrap:wrap;}
+  .glide-metric .num{font-size:30px; font-weight:900; color:var(--green); letter-spacing:-0.02em;}
+  .glide-metric .lbl{font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:4px;}
+  @media (prefers-reduced-motion: reduce){ .glide-scene{transition:none;} }
+  .verdict-score{font-size:clamp(56px,10vw,100px); font-weight:900; letter-spacing:-0.04em; color:var(--danger); line-height:0.9; margin-bottom:6px;}
+  .verdict-score small{font-size:0.32em; color:var(--text-dim); font-weight:700;}
+  .verdict-sub{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:32px;}
+  .verdict-line{font-size:clamp(19px,3vw,25px); font-weight:800; color:#fff; max-width:620px; margin:0 auto 14px;}
+  .verdict-line.dim{color:var(--text-dim); font-weight:700;}
+  .verdict-note{font-size:14.5px; color:var(--text-dim); max-width:540px; margin:22px auto 0;}
+  .verdict-remaining{margin-top:24px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:center; max-width:640px; margin-left:auto; margin-right:auto;}
+  .verdict-remaining-label{width:100%; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:4px;}
+  .verdict-remaining-link{font-family:'JetBrains Mono',monospace; font-size:12px; border:1px solid var(--border); border-radius:100px; padding:9px 16px; background:transparent; color:var(--green); cursor:pointer; transition:all .2s;}
+  .verdict-remaining-link:hover{border-color:var(--green); background:rgba(0,212,180,0.1); transform:translateY(-1px);}
+
+  .verdict-log{border-top:1px dashed var(--border); margin-top:38px; padding-top:32px; text-align:left; max-width:620px; margin-left:auto; margin-right:auto;}
+  .verdict-log-title{font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--green); margin-bottom:14px;}
+  .verdict-log-chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .verdict-log-chip{font-family:'JetBrains Mono',monospace; font-size:11px; border:1px solid var(--border); border-radius:100px; padding:6px 13px; color:var(--text-dim);}
+  .verdict-log-text{font-size:14.5px; color:var(--text); line-height:1.6;}
+
+  /* ===== HIRING NOTES — the closing signature moment ===== */
+  .notes-block{border-top:1px solid var(--border); background:linear-gradient(180deg, transparent, rgba(0,212,180,0.04));}
+  .notes-doc{border:1px solid var(--border); border-radius:20px; background:var(--surface); margin-top:36px; overflow:hidden;}
+  .notes-doc-head{padding:22px 28px; border-bottom:1px dashed var(--border); display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;}
+  .notes-doc-head h3{font-size:15px; font-family:'JetBrains Mono',monospace; letter-spacing:0.02em; font-weight:700;}
+  .notes-confidential{font-size:10.5px; color:var(--danger); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:16px; opacity:0.85;}
+  .notes-doc-meta{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em;}
+  .notes-doc-body{padding:28px;}
+  .notes-line{font-size:14.5px; color:var(--text-dim); margin-bottom:16px; line-height:1.6;}
+  .notes-checklist{display:flex; flex-direction:column; gap:11px; margin-bottom:26px;}
+  .notes-check-item{display:flex; align-items:center; gap:13px; font-size:14.5px; color:var(--text-dim); transition:color .3s;}
+  .notes-check-item.yes{color:var(--text);}
+  .notes-check-mark{font-family:'JetBrains Mono',monospace; font-weight:800; width:18px; flex-shrink:0; font-size:15px;}
+  .notes-check-item.yes .notes-check-mark{color:var(--green);}
+  .notes-check-item.no .notes-check-mark{color:var(--text-dim); opacity:0.5;}
+  .notes-verdict{border-top:1px dashed var(--border); padding-top:20px; margin-bottom:6px;}
+  .notes-verdict .verdict-tag{display:block; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; font-weight:700;}
+  .notes-verdict .verdict-line{font-size:18px; font-weight:800; color:#fff; line-height:1.5;}
+  .notes-close{border-top:1px solid var(--border); padding-top:18px; font-size:15px; font-weight:700; color:#fff;}
+  @media (max-width:700px){ .notes-doc-body{padding:22px;} .notes-doc-head{padding:18px 22px;} }
+
   /* ===== HIRING BRIEF — bridges Hiring Notes and Connect ===== */
   .brief-block{border-top:1px solid var(--border);}
   .brief-eyebrow-num{display:inline-flex; align-items:center; gap:10px; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:20px;}
@@ -322,97 +416,6 @@
   .brief-rec-verdict strong{color:var(--text);}
   @media (max-width:800px){ .brief-closing-right{border-left:none; border-top:1px dashed var(--border);} }
 
-
-  /* ===== THE WRONG TURN TEST — moved after trust is earned ===== */
-  .test-section{border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:linear-gradient(180deg, rgba(30,111,255,0.04), transparent);}
-  .test-eyebrow{display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--danger); border:1px solid var(--danger); border-radius:100px; padding:6px 16px; margin-bottom:20px;}
-  .test-intro{font-size:13.5px; color:var(--text-dim); max-width:560px; margin-bottom:22px;}
-  .test-question{font-size:clamp(20px,3vw,27px); font-weight:800; line-height:1.4; max-width:620px; margin-bottom:28px;}
-  .test-choices{display:flex; gap:12px; flex-wrap:wrap;}
-  .test-choice{border:1.5px solid var(--border); border-radius:100px; padding:13px 22px; background:var(--surface); color:var(--text); font-family:inherit; font-size:14px; font-weight:700; cursor:pointer; transition:all .2s;}
-  .test-choice:hover{border-color:var(--blue);}
-  .test-choice.picked{border-color:var(--green); background:rgba(0,212,180,0.1);}
-  .test-ack{margin-top:20px; font-size:14px; color:var(--green); font-style:italic; display:none;}
-  .test-ack.show{display:block;}
-
-  .verdict-block{border-top:1px solid var(--border); background:#000;}
-  .verdict-block .wrap{text-align:center;}
-
-  /* ===== MICRO DECISION — reusable inline forced-choice, scattered through the site ===== */
-  .micro-decision{border:1px solid var(--border); border-radius:16px; padding:24px 26px; background:var(--surface); margin-top:30px; text-align:left;}
-  .micro-tag{font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--danger); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; display:block;}
-  .micro-q{font-size:14.5px; font-weight:700; color:var(--text); margin-bottom:16px; line-height:1.5;}
-  .micro-choices{display:flex; gap:10px; flex-wrap:wrap;}
-  .micro-choice{border:1.5px solid var(--border); border-radius:100px; padding:10px 18px; background:transparent; color:var(--text); font-family:inherit; font-size:13.5px; font-weight:700; cursor:pointer; transition:all .2s;}
-  .micro-choice:hover{border-color:var(--blue);}
-  .micro-decision.answered .micro-choice:not(.picked){opacity:0.4;}
-  .micro-choice.picked{border-color:var(--green); background:rgba(0,212,180,0.1);}
-  .micro-decision.missed .micro-choice.picked{border-color:var(--danger); background:rgba(255,77,109,0.1);}
-  .micro-reveal{margin-top:16px; padding-top:16px; border-top:1px dashed var(--border); font-size:13.5px; color:var(--text-dim); line-height:1.6; display:none;}
-  .micro-reveal.show{display:block;}
-  .micro-decision.matched .micro-reveal{color:var(--green);}
-  .decision-panel-inner .micro-decision{margin-top:0;}
-
-  /* ===== GLIDE EXPERIENCE — full-screen cinematic sequence ===== */
-  .glide-exp{position:fixed; inset:0; width:100vw; height:100vh; z-index:200; background:rgba(3,4,8,0.72); backdrop-filter:blur(10px); display:none; align-items:center; justify-content:center; padding:24px; box-sizing:border-box;}
-  .glide-exp.open{display:flex;}
-  .glide-exp-card{width:100%; max-width:760px; max-height:88vh; background:var(--bg); background-image:radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px); background-size:26px 26px; border:1px solid var(--border); border-radius:24px; box-shadow:0 40px 100px rgba(0,0,0,0.6); display:flex; flex-direction:column; padding:44px 32px 28px; box-sizing:border-box; position:relative; overflow:hidden;}
-  @media (max-width:640px){ .glide-exp{padding:12px;} .glide-exp-card{padding:40px 18px 20px; max-height:92vh;} .glide-scene{padding:6px;} }
-  .glide-exp-close{position:absolute; top:22px; right:24px; width:40px; height:40px; border-radius:50%; border:1px solid var(--border); background:rgba(255,255,255,0.04); color:var(--text); font-size:16px; cursor:pointer; z-index:2; transition:border-color .2s;}
-  .glide-exp-close:hover{border-color:var(--text-dim);}
-  .glide-exp-progress{display:flex; justify-content:center; gap:8px; margin-bottom:36px; flex-shrink:0;}
-  .glide-dot{width:7px; height:7px; border-radius:50%; background:var(--border); transition:background .3s, transform .3s;}
-  .glide-dot.active{background:var(--green); transform:scale(1.4);}
-  .glide-exp-stage{flex:1; position:relative; display:flex; align-items:center; justify-content:center; max-width:680px; margin:0 auto; width:100%; min-height:0;}
-  .glide-scene{position:absolute; inset:0; display:none; flex-direction:column; align-items:center; justify-content:center; text-align:center; opacity:0; transform:translateY(14px); transition:opacity .5s ease, transform .5s ease; overflow-y:auto; padding:10px;}
-  .glide-scene.active{display:flex; opacity:1; transform:translateY(0);}
-  .glide-eyebrow{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:18px;}
-  .glide-scene h3{font-size:clamp(22px,4vw,36px); line-height:1.3; margin-bottom:16px;}
-  .glide-scene p{font-size:15.5px; color:var(--text-dim); max-width:540px; line-height:1.65;}
-  .glide-scene-icon{color:var(--green); margin-bottom:20px; opacity:0.9;}
-  .glide-scene-lead{font-size:14px; color:var(--text-dim); font-style:italic; max-width:480px; margin-bottom:22px;}
-  .glide-quote{font-size:clamp(20px,3.2vw,28px); font-weight:700; font-style:italic; color:var(--text); line-height:1.4; max-width:560px; margin-bottom:18px;}
-  .glide-caption{font-size:14px; color:var(--text-dim); max-width:520px; line-height:1.6;}
-  .glide-wordmark{font-size:clamp(46px,9vw,86px); font-weight:900; letter-spacing:-0.03em; background:linear-gradient(135deg, var(--blue), var(--green)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; margin-bottom:18px;}
-  .glide-exp-nav{display:flex; justify-content:space-between; align-items:center; max-width:680px; margin:26px auto 0; width:100%; flex-shrink:0;}
-  .glide-metric-row{display:flex; gap:34px; margin-top:24px; justify-content:center; flex-wrap:wrap;}
-  .glide-metric .num{font-size:30px; font-weight:900; color:var(--green); letter-spacing:-0.02em;}
-  .glide-metric .lbl{font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em; margin-top:4px;}
-  @media (prefers-reduced-motion: reduce){ .glide-scene{transition:none;} }
-  .verdict-score{font-size:clamp(56px,10vw,100px); font-weight:900; letter-spacing:-0.04em; color:var(--danger); line-height:0.9; margin-bottom:6px;}
-  .verdict-score small{font-size:0.32em; color:var(--text-dim); font-weight:700;}
-  .verdict-sub{font-family:'JetBrains Mono',monospace; font-size:11.5px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:32px;}
-  .verdict-line{font-size:clamp(19px,3vw,25px); font-weight:800; color:#fff; max-width:620px; margin:0 auto 14px;}
-  .verdict-line.dim{color:var(--text-dim); font-weight:700;}
-  .verdict-note{font-size:14.5px; color:var(--text-dim); max-width:540px; margin:22px auto 0;}
-
-  .verdict-log{border-top:1px dashed var(--border); margin-top:38px; padding-top:32px; text-align:left; max-width:620px; margin-left:auto; margin-right:auto;}
-  .verdict-log-title{font-family:'JetBrains Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--green); margin-bottom:14px;}
-  .verdict-log-chips{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
-  .verdict-log-chip{font-family:'JetBrains Mono',monospace; font-size:11px; border:1px solid var(--border); border-radius:100px; padding:6px 13px; color:var(--text-dim);}
-  .verdict-log-text{font-size:14.5px; color:var(--text); line-height:1.6;}
-
-  /* ===== HIRING NOTES — the closing signature moment ===== */
-  .notes-block{border-top:1px solid var(--border); background:linear-gradient(180deg, transparent, rgba(0,212,180,0.04));}
-  .notes-doc{border:1px solid var(--border); border-radius:20px; background:var(--surface); margin-top:36px; overflow:hidden;}
-  .notes-doc-head{padding:22px 28px; border-bottom:1px dashed var(--border); display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap;}
-  .notes-doc-head h3{font-size:15px; font-family:'JetBrains Mono',monospace; letter-spacing:0.02em; font-weight:700;}
-  .notes-confidential{font-size:10.5px; color:var(--danger); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:16px; opacity:0.85;}
-  .notes-doc-meta{font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-dim); text-transform:uppercase; letter-spacing:0.05em;}
-  .notes-doc-body{padding:28px;}
-  .notes-line{font-size:14.5px; color:var(--text-dim); margin-bottom:16px; line-height:1.6;}
-  .notes-checklist{display:flex; flex-direction:column; gap:11px; margin-bottom:26px;}
-  .notes-check-item{display:flex; align-items:center; gap:13px; font-size:14.5px; color:var(--text-dim); transition:color .3s;}
-  .notes-check-item.yes{color:var(--text);}
-  .notes-check-mark{font-family:'JetBrains Mono',monospace; font-weight:800; width:18px; flex-shrink:0; font-size:15px;}
-  .notes-check-item.yes .notes-check-mark{color:var(--green);}
-  .notes-check-item.no .notes-check-mark{color:var(--text-dim); opacity:0.5;}
-  .notes-verdict{border-top:1px dashed var(--border); padding-top:20px; margin-bottom:6px;}
-  .notes-verdict .verdict-tag{display:block; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--green); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; font-weight:700;}
-  .notes-verdict .verdict-line{font-size:18px; font-weight:800; color:#fff; line-height:1.5;}
-  .notes-close{border-top:1px solid var(--border); padding-top:18px; font-size:15px; font-weight:700; color:#fff;}
-  @media (max-width:700px){ .notes-doc-body{padding:22px;} .notes-doc-head{padding:18px 22px;} }
-
   /* ===== CONNECT — one unified card with LinkedIn / Email / Resume inside it ===== */
   /* ===== CONNECT — Let's have a real conversation ===== */
   .connect-block{border-top:1px solid var(--border); padding:70px 0 60px;}
@@ -449,6 +452,19 @@
 
   footer{padding:30px 0; border-top:1px solid var(--border);}
   footer p{font-size:12.5px; color:var(--text-dim); font-family:'JetBrains Mono',monospace;}
+
+  /* ===== EXTRA MOBILE POLISH ===== */
+  @media (max-width:480px){
+    .hero-actions{flex-direction:column; align-items:stretch;}
+    .hero-actions .btn{width:100%; justify-content:center; text-align:center;}
+    .test-choices, .micro-choices{flex-direction:column;}
+    .test-choice, .micro-choice{width:100%; text-align:center;}
+    .glide-exp-nav{flex-wrap:wrap; gap:12px; justify-content:center;}
+    .glide-exp-nav .btn{flex:1; min-width:120px; justify-content:center;}
+    .verdict-remaining-link{width:100%; text-align:center;}
+    .work-links{flex-direction:column; align-items:stretch;}
+    .work-links .btn, .work-links .decision-toggle{width:100%; justify-content:center; text-align:center;}
+  }
 </style>
 </head>
 <body>
@@ -640,7 +656,7 @@
   <div class="wrap">
     <span class="eyebrow">Featured Work</span>
     <h2 class="reveal">Two cases <span style="color:var(--blue);">I couldn't stop thinking about.</span></h2>
-    <p class="work-lead reveal">Tap "Enter the Investigation" on either one. The alternatives I rejected are the actual point, not the finished product.</p>
+    <p class="work-lead reveal">Tap "Enter the Glide story" or "Enter the full case study" below. The alternatives I rejected are the actual point, not the finished product.</p>
 
     <div class="work-stack reveal">
       <!-- GLIDE — the hero -->
@@ -692,7 +708,7 @@
             <div class="decision-panel" id="panel-career">
               <div class="decision-panel-inner">
                 <div class="micro-decision" id="micro-careeros">
-                  <span class="micro-tag">Decision Moment 2 of 5</span>
+                  <span class="micro-tag">Decision Moment 3 of 5</span>
                   <p class="micro-q">Quick call, before you read on: auto-apply on the candidate's behalf, or require manual confirmation every time?</p>
                   <div class="micro-choices">
                     <button class="micro-choice" onclick="answerMicro('careeros', this, 'auto', 'manual', 'That\'s what shipped. Automation should remove work, not remove the decision.', 'I actually built full auto-apply first. Then killed it, because automation should remove work, not remove the decision.')">Auto-apply</button>
@@ -827,7 +843,7 @@
     </div>
 
     <div class="micro-decision reveal" id="micro-workingstyle">
-      <span class="micro-tag">Decision Moment 3 of 5</span>
+      <span class="micro-tag">Decision Moment 4 of 5</span>
       <p class="micro-q">Which would you rather hear from a PM on your team?</p>
       <div class="micro-choices">
         <button class="micro-choice" onclick="answerMicro('workingstyle', this, 'adjective', 'behavior', 'Good, because the second one is the only one that\'s actually falsifiable.', 'Fair, but &quot;data-driven&quot; means nothing until it\'s a behavior. That\'s the whole point of this section.')">"I'm data-driven"</button>
@@ -846,7 +862,7 @@
     <p class="work-lead reveal">Most PMs edit these out. They're the fastest way to see how someone actually thinks, so they stay in.</p>
 
     <div class="micro-decision reveal" id="micro-failures">
-      <span class="micro-tag">Decision Moment 4 of 5</span>
+      <span class="micro-tag">Decision Moment 5 of 5</span>
       <p class="micro-q">Before you read the three below: which mistake do you think cost the most time?</p>
       <div class="micro-choices">
         <button class="micro-choice" onclick="answerMicro('failures', this, 'checklist', 'checklist', 'Right. That one took two full rewrites before I found the real question people were actually asking.', 'Actually the checklist mistake cost the most. It took two full rewrites before I found the real question people were asking.')">The compliance checklist</button>
@@ -900,8 +916,9 @@
     <span class="test-eyebrow">Decision Moments: Your Track Record</span>
     <p class="verdict-score reveal" id="verdictScore">0<small> / 0</small></p>
     <p class="verdict-sub reveal">matched the real call, across the decisions scattered through this site</p>
-    <p class="verdict-line reveal" id="verdictLine">You haven't hit one yet. There are five scattered through the site: in the framework, CareerOS, Working Style, Failures, and inside Glide.</p>
+    <p class="verdict-line reveal" id="verdictLine">You haven't hit one yet. There are five scattered through the site: in the framework, inside Glide, CareerOS, Working Style, and Failures.</p>
     <p class="verdict-note reveal" id="verdictNote">Each one asks you to call it before you see what actually happened. That's the actual test, not one big question at the end.</p>
+    <div class="verdict-remaining reveal" id="verdictRemaining"></div>
 
     <div class="verdict-log reveal" id="verdictLog">
       <p class="verdict-log-title mono">Your Decision Log</p>
@@ -934,13 +951,15 @@
   </div>
 </section>
 
+
+
 <!-- ============ WHY HIRE ME — bridges Hiring Notes and Connect ============ -->
 <section class="brief-block" id="resume">
   <div class="wrap">
     <span class="brief-eyebrow-num mono">Hiring Brief <i></i></span>
 
     <div class="brief-hero-row">
-      <div class="brief-hero-left">
+      <div class="brief-hero-left reveal">
         <h2 class="brief-h2">Why I'll be a<br><span class="hl">great PM</span><br>for your team.</h2>
         <p class="brief-stat-line"><strong>6+</strong> Years <span class="brief-stat-sep">·</span> <strong>15+</strong> Decisions <span class="brief-stat-sep">·</span> <strong>7</strong> Case Files</p>
         <div class="brief-quote-card">
@@ -950,7 +969,7 @@
         </div>
       </div>
 
-      <div class="brief-mindset-wrap">
+      <div class="brief-mindset-wrap reveal">
         <div class="brief-hero-card">
           <div class="brief-hero-card-left">
             <div class="brief-hero-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/></svg></div>
@@ -1004,7 +1023,7 @@
       </div>
     </div>
 
-    <p class="brief-table-label"><span class="brief-table-line"></span>Here's what I bring to the table.<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5z"/></svg></p>
+    <p class="brief-table-label reveal"><span class="brief-table-line"></span>Here's what I bring to the table.<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.5 6.5L20 10l-6.5 1.5L12 18l-1.5-6.5L4 10l6.5-1.5z"/></svg></p>
 
     <div class="brief-closing-bar reveal">
       <div class="brief-closing-left">
@@ -1023,7 +1042,6 @@
     </div>
   </div>
 </section>
-
 
 <!-- ============ CONNECT — Let's have a real conversation ============ -->
 <section class="connect-block" id="contact" data-zone="connect">
@@ -1111,7 +1129,7 @@
     </div>
 
     <div class="glide-scene" data-scene="3">
-      <span class="glide-eyebrow">Decision Moment 5 of 5</span>
+      <span class="micro-tag">Decision Moment 2 of 5</span>
       <p class="glide-scene-lead">Real travelers kept asking one question no one would answer. Here's where most products get this wrong, mine included, the first time.</p>
       <div class="micro-decision" id="micro-glide" style="text-align:center; max-width:520px;">
         <p class="micro-q">You're building this. What do you ship first?</p>
@@ -1237,13 +1255,14 @@
   const decisionLog = [];
   const loggedKeys = new Set();
   let statsViewed = false;
-  let notesGenerated = false;
 
   function logDecision(key, action, insight, category){
     if(loggedKeys.has(key)) return;
     loggedKeys.add(key);
     decisionLog.push({key, action, insight, category, time: Date.now()});
     renderVerdictLog();
+    // keep the Hiring Notes in sync immediately, in case that section is already visible
+    generateHiringNotes();
   }
 
   function renderVerdictLog(){
@@ -1270,17 +1289,17 @@
     textEl.textContent = `Based on where you actually spent attention, not where I pointed you: ${rest}; and ${last}. That's not a personality test. It's just what you paid attention to, which happens to be the same instrument I use on my own decisions: what someone looks at twice tells you more than what they say they care about.`;
   }
 
-  /* ===== HIRING NOTES — synthesized once, from the whole session ===== */
+  /* ===== HIRING NOTES — synthesized live, from the whole session ===== */
   function generateHiringNotes(){
-    if(notesGenerated) return;
-    notesGenerated = true;
+    const notesTimeEl = document.getElementById('notesTime');
+    if(!notesTimeEl) return; // section not in the DOM yet
 
     const elapsedMs = Date.now() - pageLoadTime;
     const mins = Math.floor(elapsedMs / 60000);
     const secs = Math.floor((elapsedMs % 60000) / 1000);
-    document.getElementById('notesTime').textContent = `Time on page: ${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
+    notesTimeEl.textContent = `Time on page: ${mins}m ${secs < 10 ? '0' : ''}${secs}s`;
 
-    const openedGlide = loggedKeys.has('glide');
+    const openedGlide = loggedKeys.has('glide') || loggedKeys.has('glide-experience');
     const openedCareer = loggedKeys.has('career');
     const failureKeys = ['today-glide','today-volume','today-agency'].filter(k => loggedKeys.has(k));
     const libKeys = [...loggedKeys].filter(k => k.startsWith('lib-'));
@@ -1296,13 +1315,16 @@
       { label: `Sampled most of the library (${libKeys.length} of 7)`, yes: c },
       { label: 'Engaged with the metrics above', yes: d }
     ];
-    document.getElementById('notesChecklist').innerHTML = items.map(i =>
-      `<div class="notes-check-item ${i.yes ? 'yes' : 'no'}"><span class="notes-check-mark">${i.yes ? '✓' : '✕'}</span><span>${i.label}</span></div>`
-    ).join('');
+    const checklistEl = document.getElementById('notesChecklist');
+    if(checklistEl){
+      checklistEl.innerHTML = items.map(i =>
+        `<div class="notes-check-item ${i.yes ? 'yes' : 'no'}"><span class="notes-check-mark">${i.yes ? '✓' : '✕'}</span><span>${i.label}</span></div>`
+      ).join('');
+    }
 
     let verdict;
     if(decisionLog.length === 0){
-      verdict = "Insufficient signal. You did not engage with any decision, failure, or library entry. Recommendation: hard to assess from behavior alone. Worth a direct conversation instead.";
+      verdict = "Insufficient signal so far. You haven't engaged with any decision, failure, or library entry yet. This note will update as you keep browsing.";
     } else if(a && b && !d){
       verdict = "You consistently gravitated toward trade-offs over outcomes. Explored both flagship decisions and every failure. Skipped the metrics entirely. You seem interested in judgment over execution. Recommendation: proceed to a product interview.";
     } else if(a && b && d){
@@ -1317,17 +1339,22 @@
       const yesCount = [a,b,c,d].filter(Boolean).length;
       verdict = yesCount >= 3
         ? "You went deep on almost everything on this page. Thorough, not just curious. Recommendation: proceed to a product interview."
-        : "You sampled selectively rather than reading everything. Efficient, not exhaustive. Recommendation: worth a follow-up conversation to fill in the gaps.";
+        : "You're still browsing. This note keeps updating live as you open more, so check back after exploring a bit more of the page.";
     }
 
-    document.getElementById('notesVerdict').innerHTML = decisionLog.length === 0
-      ? `<span class="verdict-line">${verdict}</span>`
-      : `<span class="verdict-tag">Observed</span><span class="verdict-line">${verdict}</span>`;
+    const verdictEl = document.getElementById('notesVerdict');
+    if(verdictEl){
+      verdictEl.innerHTML = decisionLog.length === 0
+        ? `<span class="verdict-line">${verdict}</span>`
+        : `<span class="verdict-tag">Observed</span><span class="verdict-line">${verdict}</span>`;
+    }
 
     const closeEl = document.getElementById('notesClose');
-    closeEl.textContent = decisionLog.length === 0
-      ? "Fair enough. Sometimes the headline is the whole pitch. If it worked, you already know where the email address is."
-      : "That's exactly how I hope to be evaluated, not the story, the pattern underneath it.";
+    if(closeEl){
+      closeEl.textContent = decisionLog.length === 0
+        ? "Fair enough. Sometimes the headline is the whole pitch. If it worked, you already know where the email address is."
+        : "That's exactly how I hope to be evaluated, not the story, the pattern underneath it.";
+    }
   }
 
   // decision panels on work cards
@@ -1402,6 +1429,35 @@
   // Decision Moments — small forced choices scattered across the site, replacing the single Wrong Turn Test
   const microResults = [];
   const answeredMicro = new Set();
+  const microOrder = ['framework', 'glide', 'careeros', 'workingstyle', 'failures'];
+  const microMeta = {
+    framework: { label: 'My Vocabulary', anchorSel: '#micro-framework' },
+    careeros: { label: 'CareerOS', anchorSel: '#micro-careeros', prep: () => {
+        const panel = document.getElementById('panel-career');
+        if(panel && !panel.classList.contains('open')){
+          const btn = document.querySelector('.work-card.secondary .decision-toggle');
+          if(btn) toggleDecision('career', btn);
+        }
+      }
+    },
+    workingstyle: { label: 'Working Style', anchorSel: '#micro-workingstyle' },
+    failures: { label: 'Lessons From Failure', anchorSel: '#micro-failures' },
+    glide: { label: 'Inside Glide', anchorSel: null, prep: () => openGlideExp(3) }
+  };
+
+  function jumpToMicro(id){
+    const meta = microMeta[id];
+    if(!meta) return;
+    if(meta.prep) meta.prep();
+    if(meta.anchorSel){
+      const delay = meta.prep ? 250 : 0;
+      setTimeout(() => {
+        const el = document.querySelector(meta.anchorSel);
+        if(el) el.scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'center' });
+      }, delay);
+    }
+    trackEvent('jump_to_micro_' + id);
+  }
 
   function answerMicro(id, btn, picked, correct, revealMatched, revealMissed){
     if(answeredMicro.has(id)) return;
@@ -1428,6 +1484,7 @@
     const scoreEl = document.getElementById('verdictScore');
     const lineEl = document.getElementById('verdictLine');
     const noteEl = document.getElementById('verdictNote');
+    const remainingEl = document.getElementById('verdictRemaining');
     if(!scoreEl) return;
 
     const answered = microResults.length;
@@ -1435,21 +1492,27 @@
     scoreEl.innerHTML = `${matched}<small> / ${answered}</small>`;
 
     if(answered === 0){
-      lineEl.textContent = "You haven't hit one yet. There are five scattered through the site: in the framework, CareerOS, Working Style, Failures, and inside Glide.";
+      lineEl.textContent = "You haven't hit one yet. There are five scattered through the site: in the framework, inside Glide, CareerOS, Working Style, and Failures.";
       noteEl.textContent = "Each one asks you to call it before you see what actually happened. That's the actual test, not one big question at the end.";
-      return;
-    }
-
-    if(answered < 5){
+    } else if(answered < 5){
       lineEl.textContent = `You've matched ${matched} of ${answered} so far. ${5 - answered} more are waiting, in the sections you haven't reached yet.`;
-      noteEl.textContent = "Keep scrolling. The full picture only makes sense once you've hit all five.";
-      return;
+      noteEl.textContent = "Keep scrolling, or jump straight there below. The full picture only makes sense once you've hit all five.";
+    } else {
+      lineEl.textContent = `Final tally: ${matched} of 5 matched the real call.`;
+      noteEl.textContent = matched >= 4
+        ? "That's a strong hit rate. Either you think in very similar patterns to me, or you got lucky five times in a row."
+        : "Most people land here. The obvious answer is usually not the real one, mine included. That gap is most of the job. If that's the judgment you want on your team, keep scrolling.";
     }
 
-    lineEl.textContent = `Final tally: ${matched} of 5 matched the real call.`;
-    noteEl.textContent = matched >= 4
-      ? "That's a strong hit rate. Either you think in very similar patterns to me, or you got lucky five times in a row."
-      : "Most people land here. The obvious answer is usually not the real one, mine included. That gap is most of the job. If that's the judgment you want on your team, keep scrolling.";
+    if(remainingEl){
+      const remaining = microOrder.filter(id => !answeredMicro.has(id));
+      if(remaining.length === 0){
+        remainingEl.innerHTML = '';
+      } else {
+        remainingEl.innerHTML = `<span class="verdict-remaining-label mono">${remaining.length} decision${remaining.length > 1 ? 's' : ''} left to answer:</span>` +
+          remaining.map(id => `<button class="verdict-remaining-link" onclick="jumpToMicro('${id}')">${microMeta[id].label} →</button>`).join('');
+      }
+    }
   }
 
   /* ===== GLIDE EXPERIENCE — full-screen cinematic walkthrough ===== */
@@ -1491,12 +1554,12 @@
     startGlideTimer();
   }
 
-  function openGlideExp(){
+  function openGlideExp(startScene){
     const exp = document.getElementById('glideExp');
     if(!exp) return;
     exp.classList.add('open');
     document.body.style.overflow = 'hidden';
-    glideScene = 0;
+    glideScene = (typeof startScene === 'number' && startScene >= 0 && startScene < glideTotalScenes) ? startScene : 0;
     updateGlideScene();
     trackEvent('glide_experience_open');
     if(!glideOpened){
@@ -1557,7 +1620,7 @@
     document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
   }
 
-  // mark the stats section as seen, for the Hiring Notes read
+  // mark the stats/mindset section as seen, for the Hiring Notes read
   const statsEl = document.querySelector('.brief-mindset-wrap');
   if(statsEl){
     const statsObs = new IntersectionObserver((entries) => {
@@ -1566,14 +1629,29 @@
     statsObs.observe(statsEl);
   }
 
-  // generate the Hiring Notes once the visitor actually reaches that section
+  // generate + keep updating the Hiring Notes while that section is in view, so it reflects
+  // activity that happens both before AND after the visitor first scrolls past it
   const notesEl = document.getElementById('notes');
   if(notesEl){
+    let notesInterval = null;
     const notesObs = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if(e.isIntersecting){ generateHiringNotes(); notesObs.disconnect(); } });
-    }, {threshold:0.25});
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          generateHiringNotes();
+          if(!notesInterval){
+            notesInterval = setInterval(generateHiringNotes, 1500);
+          }
+        } else if(notesInterval){
+          clearInterval(notesInterval);
+          notesInterval = null;
+        }
+      });
+    }, {threshold:0.15});
     notesObs.observe(notesEl);
   }
+
+  // initialize the Verdict section's remaining-decisions list on load
+  renderMicroVerdict();
 
   // hero mouse-parallax (pseudo-3D depth) — kept, it's the one ambient signature moment
   if(!prefersReduced && window.matchMedia('(min-width:901px)').matches){
